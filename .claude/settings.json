@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(grep -A 10 \"constructor\" /tmp/ioBroker.tibberlink/src/lib/tibberDataAPI.ts | head -15)",
+      "Read(//tmp/ioBroker.tibberlink/src/lib/**)",
+      "Bash(sed -n '35,85p' /tmp/ioBroker.tibberlink/src/main.ts)",
+      "Read(//tmp/ioBroker.tibberlink/src/**)"
+    ]
+  }
+}
