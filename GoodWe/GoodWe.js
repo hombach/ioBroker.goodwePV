@@ -1,5 +1,6 @@
 const dgram = require("dgram");
 
+/** UDP packet constants for GoodWe inverter communication protocol. */
 class GoodWePacket {
 	static Format = { Packet: 7, Checksum: 2 };
 	static Header = { High: 0xaa, Low: 0x55 };
@@ -23,6 +24,7 @@ class GoodWePacket {
 	};
 }
 
+/** Modbus register frame constants for GoodWe inverter. */
 class GoodWeRegister {
 	static Format = { Frame: 5, CRC16: 2 };
 	static RecvHeader = { High: 0xaa, Low: 0x55 };
@@ -30,6 +32,7 @@ class GoodWeRegister {
 	static FcDode = { Read: 0x03, ReadSingleRegister: 0x06, WriteMultipleRegister: 0x09 };
 }
 
+/** Inverter identification information (firmware version, serial number, model). */
 class GoodWeIdInfo {
 	FirmwareVersion = "";
 	ModelName = "";
@@ -40,6 +43,7 @@ class GoodWeIdInfo {
 	SafetyCountryCode = 0x00;
 }
 
+/** Inverter device information (rated power, AC output type, software versions). */
 class GoodWeDeviceInfo {
 	ModbusProtocolVersion = 0;
 	RatedPower = 0;
@@ -55,6 +59,7 @@ class GoodWeDeviceInfo {
 	ARM_IntFirmwareVersion = "";
 }
 
+/** DC input parameters (voltage, current, power, mode) for a single PV string or battery. */
 class DcParameters {
 	Voltage = 0.0;
 	Current = 0.0;
@@ -62,6 +67,7 @@ class DcParameters {
 	Mode = 0;
 }
 
+/** AC grid phase parameters (voltage, current, frequency, power). */
 class AcPhase {
 	Voltage = 0.0;
 	Current = 0.0;
@@ -69,6 +75,7 @@ class AcPhase {
 	Power = 0.0;
 }
 
+/** AC backup phase parameters including operating mode. */
 class ACPhaseBackup {
 	Voltage = 0.0;
 	Current = 0.0;
@@ -77,6 +84,7 @@ class ACPhaseBackup {
 	Mode = 0;
 }
 
+/** Complete inverter running data snapshot (PV inputs, grid, battery, energy counters). */
 class GoodWeRunningData {
 	Rtc = new Date();
 	Pv1 = new DcParameters();
@@ -135,11 +143,13 @@ class GoodWeRunningData {
 	TotalPowerPv = 0;
 }
 
+/** Smart meter phase data (active power and power factor). */
 class GoodWeMeterPhase {
 	ActivePower = 0;
 	PowerFactor = 0.0;
 }
 
+/** External communication data from the inverter's smart meter interface. */
 class GoodWeExternalComData {
 	Commode = 0;
 	Rssi = 0;
@@ -157,6 +167,7 @@ class GoodWeExternalComData {
 	EnergyTotalBuy = 0.0;
 }
 
+/** Battery Management System information (SOC, SOH, temperature, charge/discharge limits). */
 class GoodweBmSInfo {
 	Status = 0;
 	PackTemperature = 0.0;
@@ -168,6 +179,7 @@ class GoodweBmSInfo {
 	BatteryStrings = 0;
 }
 
+/** UDP communication handler for GoodWe inverters (ET/EH/BH/BT series). */
 class GoodWeUdp {
 	static ConStatus = { Offline: false, Online: true };
 
@@ -181,14 +193,22 @@ class GoodWeUdp {
 	#extComData = new GoodWeExternalComData();
 	#bmsInfo = new GoodweBmSInfo();
 
+	/** Initializes the UDP socket with unlimited listener count. */
 	constructor() {
 		this.#client.setMaxListeners(0);
 	}
 
+	/** Closes the UDP socket and releases resources. */
 	destructor() {
 		this.#client.close();
 	}
 
+	/**
+	 * Connects to the inverter and initiates ID info query.
+	 *
+	 * @param {string} IpAddr IP address of the inverter
+	 * @param {number} Port UDP port number (typically 8899)
+	 */
 	Connect(IpAddr, Port) {
 		this.#ipAddr = IpAddr;
 		this.#port = Port;
@@ -196,6 +216,7 @@ class GoodWeUdp {
 		this.ReadIdInfo();
 	}
 
+	/** Queries the inverter identification information via UDP packet protocol. */
 	ReadIdInfo() {
 		let sendbuf = new Uint8Array(9);
 		let i;
@@ -251,6 +272,7 @@ class GoodWeUdp {
 		}
 	}
 
+	/** Queries the inverter device information via Modbus register protocol. */
 	ReadDeviceInfo() {
 		let sendbuf = new Uint8Array(8);
 		let crc;
@@ -306,6 +328,7 @@ class GoodWeUdp {
 		}
 	}
 
+	/** Queries the current running data (PV, grid, battery, energy counters) from the inverter. */
 	ReadRunningData() {
 		let sendbuf = new Uint8Array(8);
 		let crc;
@@ -441,6 +464,7 @@ class GoodWeUdp {
 		}
 	}
 
+	/** Queries external communication data (smart meter readings) from the inverter. */
 	ReadExtComData() {
 		let sendbuf = new Uint8Array(8);
 		let crc;
@@ -502,6 +526,7 @@ class GoodWeUdp {
 		}
 	}
 
+	/** Queries Battery Management System data from the inverter. */
 	ReadBmsInfo() {
 		let sendbuf = new Uint8Array(8);
 		let crc;
@@ -697,26 +722,32 @@ class GoodWeUdp {
 		return ret;
 	}
 
+	/** @returns {boolean} Current connection status (online/offline). */
 	get Status() {
 		return this.#status;
 	}
 
+	/** @returns {GoodWeIdInfo} Inverter identification information. */
 	get IdInfo() {
 		return this.#idInfo;
 	}
 
+	/** @returns {GoodWeDeviceInfo} Inverter device information. */
 	get DeviceInfo() {
 		return this.#deviceInfo;
 	}
 
+	/** @returns {GoodWeRunningData} Latest running data snapshot. */
 	get RunningData() {
 		return this.#runningData;
 	}
 
+	/** @returns {GoodWeExternalComData} Latest external communication data. */
 	get ExtComData() {
 		return this.#extComData;
 	}
 
+	/** @returns {GoodweBmSInfo} Latest Battery Management System info. */
 	get BmsInfo() {
 		return this.#bmsInfo;
 	}

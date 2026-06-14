@@ -17,7 +17,7 @@ class Goodwe extends utils.Adapter {
 	cycleCnt = 0;
 
 	/**
-	 * @param {Partial<utils.AdapterOptions>} [options]
+	 * @param {Partial<utils.AdapterOptions>} [options] Adapter options passed from ioBroker
 	 */
 	constructor(options) {
 		super({
@@ -59,7 +59,7 @@ class Goodwe extends utils.Adapter {
 	/**
 	 * Is called when adapter shuts down - callback has to be called under any circumstances!
 	 *
-	 * @param {() => void} callback
+	 * @param {() => void} callback Callback to call after cleanup is complete
 	 */
 	onUnload(callback) {
 		try {
@@ -74,8 +74,8 @@ class Goodwe extends utils.Adapter {
 	/**
 	 * Is called if a subscribed state changes
 	 *
-	 * @param {string} id
-	 * @param {ioBroker.State | null | undefined} state
+	 * @param {string} id State ID of the changed object
+	 * @param {ioBroker.State | null | undefined} state New state value, or null if deleted
 	 */
 	onStateChange(id, state) {
 		if (state) {
@@ -641,7 +641,7 @@ class Goodwe extends utils.Adapter {
 if (require.main !== module) {
 	// Export the constructor in compact mode
 	/**
-	 * @param {Partial<utils.AdapterOptions>} [options]
+	 * @param {Partial<utils.AdapterOptions>} [options] Adapter options passed from ioBroker compact mode
 	 */
 	module.exports = options => new Goodwe(options);
 } else {
