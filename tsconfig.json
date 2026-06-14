@@ -6,9 +6,26 @@
 		// do not compile anything, this file is just to configure type checking
 		// the compilation is configured in tsconfig.build.json
 		"noEmit": true,
-		"skipLibCheck": true,
+		"skipLibCheck": true, // Don't report errors in 3rd party definitions
+		"outDir": "./build/",
+		// this is necessary for the automatic typing of the adapter config
 		"resolveJsonModule": true,
 		"types": ["node", "mocha"],
+
+		// If you want to disable the stricter type checks (not recommended), uncomment the following line
+		// "strict": false,
+		// And enable some of those features for more fine-grained control
+		// "strictNullChecks": true,
+		// "strictPropertyInitialization": true,
+		// "strictBindCallApply": true,
+		// "noImplicitAny": true,
+		// "noUnusedLocals": true,
+		// "noUnusedParameters": true,
+		// Uncomment this if you want the old behavior of catch variables being `any`
+		// "useUnknownInCatchVariables": false,
+
+		// Targeting ES2023 for Node.js >20, which supports all ES2023 features
+		"target": "ES2023",
 		"allowImportingTsExtensions": true
 	},
 	"include": ["src/**/*.ts"],
