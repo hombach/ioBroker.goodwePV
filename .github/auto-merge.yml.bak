@@ -16,9 +16,9 @@
 # https://dependabot.com/docs/config-file/#automerged_updates
 
 # IMPORTANT: Hierarchical matching applies:
-# - semver:patch → only patch updates (e.g., 1.0.0 → 1.0.1)
-# - semver:minor → patch AND minor updates (e.g., 1.0.0 → 1.0.1 or 1.0.0 → 1.1.0)
-# - semver:major → patch, minor, AND major updates (all version changes)
+# - semver:patch ? only patch updates (e.g., 1.0.0 ? 1.0.1)
+# - semver:minor ? patch AND minor updates (e.g., 1.0.0 ? 1.0.1 or 1.0.0 ? 1.1.0)
+# - semver:major ? patch, minor, AND major updates (all version changes)
 
 # Additional examples:
 
