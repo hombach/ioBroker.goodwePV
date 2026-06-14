@@ -13,7 +13,7 @@ const goodWe = require("./GoodWe/GoodWe");
 let tmr_timeout;
 
 class Goodwe extends utils.Adapter {
-	inverter = new goodWe.GoodWeUdp();
+	inverter = new goodWe.GoodWeUdp(this);
 	/** @type {ioBroker.Timeout | undefined} */
 	interval;
 	cycleCnt = 0;

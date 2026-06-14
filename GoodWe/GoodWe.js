@@ -183,6 +183,7 @@ class GoodweBmSInfo {
 class GoodWeUdp {
 	static ConStatus = { Offline: false, Online: true };
 
+	#adapter;
 	#status = GoodWeUdp.ConStatus.Offline;
 	#ipAddr = "";
 	#port = 0;
@@ -193,8 +194,13 @@ class GoodWeUdp {
 	#extComData = new GoodWeExternalComData();
 	#bmsInfo = new GoodweBmSInfo();
 
-	/** Initializes the UDP socket with unlimited listener count. */
-	constructor() {
+	/**
+	 * Initializes the UDP socket with unlimited listener count.
+	 *
+	 * @param {import("@iobroker/adapter-core").AdapterInstance} adapter ioBroker adapter instance for logging
+	 */
+	constructor(adapter) {
+		this.#adapter = adapter;
 		this.#client.setMaxListeners(0);
 	}
 
@@ -267,8 +273,7 @@ class GoodWeUdp {
 				//console.log("GoodWePacket send");
 			});
 		} catch (error) {
-			this.log.info("ReadIdInfo");
-			console.error(error);
+			this.#adapter.log.error(`ReadIdInfo: ${error}`);
 		}
 	}
 
@@ -323,8 +328,7 @@ class GoodWeUdp {
 				//console.log("GoodWeDeviceInfo send");
 			});
 		} catch (error) {
-			this.log.info("ReadDeviceInfo");
-			console.error(error);
+			this.#adapter.log.error(`ReadDeviceInfo: ${error}`);
 		}
 	}
 
@@ -459,8 +463,7 @@ class GoodWeUdp {
 				//console.log("GoodWeRunningData send");
 			});
 		} catch (error) {
-			this.log.info("ReadRunningData");
-			console.error(error);
+			this.#adapter.log.error(`ReadRunningData: ${error}`);
 		}
 	}
 
@@ -521,8 +524,7 @@ class GoodWeUdp {
 				//console.log("GoodWeExtComData send");
 			});
 		} catch (error) {
-			this.log.info("ReadExtComData");
-			console.error(error);
+			this.#adapter.log.error(`ReadExtComData: ${error}`);
 		}
 	}
 
@@ -574,11 +576,16 @@ class GoodWeUdp {
 				//console.log("GoodWeBmsInfo send");
 			});
 		} catch (error) {
-			this.log.info("ReadBmsInfo");
-			console.error(error);
+			this.#adapter.log.error(`ReadBmsInfo: ${error}`);
 		}
 	}
 
+	/**
+	 * @param {Uint8Array} Data Received UDP packet
+	 * @param {number} CtrCode Expected control code
+	 * @param {number} FctCode Expected function code
+	 * @returns {boolean} True if packet is valid
+	 */
 	#CheckRecPacket(Data, CtrCode, FctCode) {
 		let packetFormat = new Uint8Array(GoodWePacket.Format.Packet);
 		let packetCrc = new Uint8Array(GoodWePacket.Format.Checksum);
@@ -610,6 +617,12 @@ class GoodWeUdp {
 		return false;
 	}
 
+	/**
+	 * @param {Uint8Array} Data Received Modbus frame
+	 * @param {number} FctCode Expected function code
+	 * @param {number} Length Expected data length
+	 * @returns {boolean} True if register frame is valid
+	 */
 	#CheckRecRegisterData(Data, FctCode, Length) {
 		let registerFrame = new Uint8Array(GoodWeRegister.Format.Frame);
 		let registerCrc = new Uint8Array(GoodWeRegister.Format.CRC16);
@@ -635,6 +648,12 @@ class GoodWeUdp {
 		return false;
 	}
 
+	/**
+	 * @param {Uint8Array} Data Source buffer
+	 * @param {number} Start Start offset
+	 * @param {number} Length Number of bytes to read
+	 * @returns {string} Decoded ASCII string
+	 */
 	#GetStringFromByteArray(Data, Start, Length) {
 		let buf = new Uint8Array(Length);
 		let value;
@@ -645,6 +664,12 @@ class GoodWeUdp {
 		return value;
 	}
 
+	/**
+	 * @param {Uint8Array} Data Source buffer
+	 * @param {number} Start Start offset
+	 * @param {number} Length Number of bytes to read
+	 * @returns {number} Unsigned integer value
+	 */
 	#GetUintFromByteArray(Data, Start, Length) {
 		let buf = new Uint8Array(Length);
 		let i;
@@ -661,6 +686,12 @@ class GoodWeUdp {
 		return value;
 	}
 
+	/**
+	 * @param {Uint8Array} Data Source buffer
+	 * @param {number} Start Start offset
+	 * @param {number} Length Number of bytes to read
+	 * @returns {number} Signed integer value
+	 */
 	#GetIntFromByteArray(Data, Start, Length) {
 		let buf = new Uint8Array(Length);
 		let i;
@@ -683,6 +714,12 @@ class GoodWeUdp {
 		return value;
 	}
 
+	/**
+	 * @param {Uint8Array} Data Source buffer
+	 * @param {number} Start Start offset
+	 * @param {number} Length Number of bytes to read
+	 * @returns {number} Float value
+	 */
 	#GetFloatFromByteArray(Data, Start, Length) {
 		let buf = new Uint8Array(Length);
 
@@ -698,6 +735,12 @@ class GoodWeUdp {
 		return f;
 	}
 
+	/**
+	 * @param {Uint8Array} Data Source buffer
+	 * @param {number} Start Start offset
+	 * @param {number} Length Number of bytes
+	 * @returns {number} CRC16 checksum (bytes swapped)
+	 */
 	#CalculatetCrc16(Data, Start, Length) {
 		let pos;
 		let i;
