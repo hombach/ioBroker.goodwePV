@@ -203,6 +203,22 @@ class Goodwe extends utils.Adapter {
 		await this.projectUtils.checkAndSetValueNumber("BMSInfo.BatteryStrings", bms.BatteryStrings);
 	}
 
+	/**
+	 * Recurring 1-second timer that drives all inverter communication.
+	 *
+	 * While offline: resets the cycle counter and retries the ID-info handshake
+	 * (ReadIdInfo) until the inverter responds and status turns Online.
+	 *
+	 * While online: spreads the four data reads across successive cycles so that
+	 * only one UDP request is in flight per second:
+	 *   cycle 1 → device info  (firmware versions, rated power — static data)
+	 *   cycle 3 → running data (PV strings, grid phases, battery, energy counters)
+	 *   cycle 5 → ext-com data (smart meter readings)
+	 *   cycle 7 → BMS info     (battery state, SOC/SOH)
+	 *
+	 * The cycle counter resets to 0 once it reaches config.pollCycle, so the
+	 * effective update rate for each data group is pollCycle seconds.
+	 */
 	private myTimer(): void {
 		if (!this.inverter.Status) {
 			this.cycleCnt = 0;

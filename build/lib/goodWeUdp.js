@@ -20,7 +20,6 @@ class GoodWeUdp {
     bmsInfo = new goodWeTypes_js_1.GoodweBmsInfo();
     constructor(adapter) {
         this.adapter = adapter;
-        this.client.setMaxListeners(0);
     }
     destructor() {
         this.client.close();
@@ -46,7 +45,7 @@ class GoodWeUdp {
         sendbuf[7] = crc >> 8;
         sendbuf[8] = crc & 0x00ff;
         try {
-            this.client.on("message", rcvbuf => {
+            this.client.once("message", rcvbuf => {
                 if (this.checkRecPacket(rcvbuf, sendbuf[4], sendbuf[5])) {
                     this.idInfo.FirmwareVersion = this.getStringFromByteArray(rcvbuf, 7, 5);
                     this.idInfo.ModelName = this.getStringFromByteArray(rcvbuf, 12, 10);
@@ -83,7 +82,7 @@ class GoodWeUdp {
         sendbuf[6] = crc >> 8;
         sendbuf[7] = crc & 0x00ff;
         try {
-            this.client.on("message", rcvbuf => {
+            this.client.once("message", rcvbuf => {
                 if (this.checkRecRegisterData(rcvbuf, sendbuf[1], sendbuf[5])) {
                     this.deviceInfo.ModbusProtocolVersion = this.getUintFromByteArray(rcvbuf, 5, 2);
                     this.deviceInfo.RatedPower = this.getUintFromByteArray(rcvbuf, 7, 2);
@@ -125,7 +124,7 @@ class GoodWeUdp {
         sendbuf[6] = crc >> 8;
         sendbuf[7] = crc & 0x00ff;
         try {
-            this.client.on("message", rcvbuf => {
+            this.client.once("message", rcvbuf => {
                 if (this.checkRecRegisterData(rcvbuf, sendbuf[1], sendbuf[5])) {
                     this.runningData.Pv1.Voltage = this.getUintFromByteArray(rcvbuf, 11, 2) / 10;
                     this.runningData.Pv1.Current = this.getUintFromByteArray(rcvbuf, 13, 2) / 10;
@@ -246,7 +245,7 @@ class GoodWeUdp {
         sendbuf[6] = crc >> 8;
         sendbuf[7] = crc & 0x00ff;
         try {
-            this.client.on("message", rcvbuf => {
+            this.client.once("message", rcvbuf => {
                 if (this.checkRecRegisterData(rcvbuf, sendbuf[1], sendbuf[5])) {
                     this.extComData.Commode = this.getUintFromByteArray(rcvbuf, 5, 2);
                     this.extComData.Rssi = this.getUintFromByteArray(rcvbuf, 7, 2);
@@ -263,8 +262,8 @@ class GoodWeUdp {
                     this.extComData.L3.PowerFactor = this.getUintFromByteArray(rcvbuf, 29, 2) / 100;
                     this.extComData.PowerFactor = this.getUintFromByteArray(rcvbuf, 31, 2) / 100;
                     this.extComData.Frequency = this.getUintFromByteArray(rcvbuf, 33, 2) / 100;
-                    this.extComData.EnergyTotalSell = this.getFloatFromByteArray(rcvbuf, 35, 4) / 10;
-                    this.extComData.EnergyTotalBuy = this.getFloatFromByteArray(rcvbuf, 39, 4) / 10;
+                    this.extComData.EnergyTotalSell = this.getFloatFromByteArray(rcvbuf, 35) / 10;
+                    this.extComData.EnergyTotalBuy = this.getFloatFromByteArray(rcvbuf, 39) / 10;
                     this.status = GoodWeUdp.ConStatus.Online;
                 }
                 else {
@@ -293,7 +292,7 @@ class GoodWeUdp {
         sendbuf[6] = crc >> 8;
         sendbuf[7] = crc & 0x00ff;
         try {
-            this.client.on("message", rcvbuf => {
+            this.client.once("message", rcvbuf => {
                 if (this.checkRecRegisterData(rcvbuf, sendbuf[1], sendbuf[5])) {
                     this.bmsInfo.Status = this.getUintFromByteArray(rcvbuf, 5, 2);
                     this.bmsInfo.PackTemperature = this.getUintFromByteArray(rcvbuf, 7, 2) / 10;
@@ -372,13 +371,8 @@ class GoodWeUdp {
         }
         return value;
     }
-    getFloatFromByteArray(data, start, length) {
-        const buf = data.subarray(start, start + length);
-        const bits = (buf[0] << 24) | (buf[1] << 16) | (buf[2] << 8) | buf[3];
-        const sign = bits >>> 31 === 0 ? 1.0 : -1.0;
-        const e = (bits >>> 23) & 0xff;
-        const m = e === 0 ? (bits & 0x7fffff) << 1 : (bits & 0x7fffff) | 0x800000;
-        return sign * m * Math.pow(2, e - 150);
+    getFloatFromByteArray(data, start) {
+        return data.readFloatBE(start);
     }
     calculateCrc16(data, start, length) {
         let crc = 0xffff;
