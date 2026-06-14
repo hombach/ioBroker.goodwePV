@@ -1,38 +1,14 @@
-// Root tsconfig to set the settings and power editor support for all TS files
+// Root tsconfig — type checking only; compilation is configured in tsconfig.build.json
 {
 	"extends": "@tsconfig/node22/tsconfig.json",
+	"compileOnSave": true,
 	"compilerOptions": {
-		// do not compile anything, this file is just to configure type checking
-		// the compilation is configured in tsconfig.build.json
 		"noEmit": true,
-
-		// check JS files, but do not compile them => tsconfig.build.json
-		"allowJs": true,
-		"checkJs": true,
-
-		// This is necessary for the automatic typing of the adapter config
+		"skipLibCheck": true,
 		"resolveJsonModule": true,
 		"types": ["node", "mocha"],
-
-		// If you want to disable the stricter type checks (not recommended), uncomment the following line
-		// "strict": false,
-		// And enable some of those features for more fine-grained control
-		// "strictNullChecks": true,
-		// "strictPropertyInitialization": true,
-		// "strictBindCallApply": true,
-		// "noImplicitAny": true,
-		// "noUnusedLocals": true,
-		// "noUnusedParameters": true,
-		// Uncomment this if you want the old behavior of catch variables being `any`
-		// "useUnknownInCatchVariables": false,
-
+		"allowImportingTsExtensions": true
 	},
-	"include": [
-		"**/*.js",
-		"**/*.d.ts"
-	],
-	"exclude": [
-		"node_modules/**",
-		"widgets/**"
-	]
+	"include": ["src/**/*.ts"],
+	"exclude": ["build/**", "node_modules/**"]
 }
