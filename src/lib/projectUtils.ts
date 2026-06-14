@@ -16,6 +16,76 @@ export class ProjectUtils {
 	}
 
 	/**
+	 * Updates (creates if not exists) a DC parameters channel with Voltage, Current, Power, Mode states.
+	 *
+	 * @param parent - Parent channel path (e.g. "RunningData")
+	 * @param name - Channel name (e.g. "PV1")
+	 * @param voltage - DC voltage value
+	 * @param current - DC current value
+	 * @param power - DC power value
+	 * @param mode - DC mode value
+	 */
+	async updateDcParameters(parent: string, name: string, voltage: number, current: number, power: number, mode: number): Promise<void> {
+		await this.checkAndSetChannel(`${parent}.${name}`, name);
+		await this.checkAndSetValueNumber(`${parent}.${name}.Voltage`, voltage);
+		await this.checkAndSetValueNumber(`${parent}.${name}.Current`, current);
+		await this.checkAndSetValueNumber(`${parent}.${name}.Power`, power);
+		await this.checkAndSetValueNumber(`${parent}.${name}.Mode`, mode);
+	}
+
+	/**
+	 * Updates (creates if not exists) an AC phase channel with Voltage, Current, Frequency, Power states.
+	 *
+	 * @param parent - Parent channel path (e.g. "RunningData")
+	 * @param name - Channel name (e.g. "GridL1")
+	 * @param voltage - AC voltage value
+	 * @param current - AC current value
+	 * @param frequency - AC frequency value
+	 * @param power - AC power value
+	 */
+	async updateAcPhase(parent: string, name: string, voltage: number, current: number, frequency: number, power: number): Promise<void> {
+		await this.checkAndSetChannel(`${parent}.${name}`, name);
+		await this.checkAndSetValueNumber(`${parent}.${name}.Voltage`, voltage);
+		await this.checkAndSetValueNumber(`${parent}.${name}.Current`, current);
+		await this.checkAndSetValueNumber(`${parent}.${name}.Frequency`, frequency);
+		await this.checkAndSetValueNumber(`${parent}.${name}.Power`, power);
+	}
+
+	/**
+	 * Updates (creates if not exists) a backup AC phase channel with Voltage, Current, Frequency, Power, Mode states.
+	 *
+	 * @param parent - Parent channel path (e.g. "RunningData")
+	 * @param name - Channel name (e.g. "BackUpL1")
+	 * @param voltage - AC voltage value
+	 * @param current - AC current value
+	 * @param frequency - AC frequency value
+	 * @param power - AC power value
+	 * @param mode - AC mode value
+	 */
+	async updateAcPhaseBackup(parent: string, name: string, voltage: number, current: number, frequency: number, power: number, mode: number): Promise<void> {
+		await this.checkAndSetChannel(`${parent}.${name}`, name);
+		await this.checkAndSetValueNumber(`${parent}.${name}.Voltage`, voltage);
+		await this.checkAndSetValueNumber(`${parent}.${name}.Current`, current);
+		await this.checkAndSetValueNumber(`${parent}.${name}.Frequency`, frequency);
+		await this.checkAndSetValueNumber(`${parent}.${name}.Power`, power);
+		await this.checkAndSetValueNumber(`${parent}.${name}.Mode`, mode);
+	}
+
+	/**
+	 * Updates (creates if not exists) a smart meter phase channel with ActivePower, PowerFactor states.
+	 *
+	 * @param parent - Parent channel path (e.g. "ExtComData")
+	 * @param name - Channel name (e.g. "L1")
+	 * @param activePower - Active power value
+	 * @param powerFactor - Power factor value
+	 */
+	async updateMeterPhase(parent: string, name: string, activePower: number, powerFactor: number): Promise<void> {
+		await this.checkAndSetChannel(`${parent}.${name}`, name);
+		await this.checkAndSetValueNumber(`${parent}.${name}.ActivePower`, activePower);
+		await this.checkAndSetValueNumber(`${parent}.${name}.PowerFactor`, powerFactor);
+	}
+
+	/**
 	 * Retrieves the value of a given state by its name.
 	 *
 	 * @param stateName - A string representing the name of the state to retrieve.
@@ -145,7 +215,7 @@ export class ProjectUtils {
 	 * @param forceMode - Optional boolean indicating if the state should be reinitiated if it already exists (default is false).
 	 * @returns A Promise that resolves when the state is checked, created (if necessary), and updated.
 	 */
-	protected async checkAndSetValue(
+	async checkAndSetValue(
 		stateName: string,
 		value: string,
 		description = "-",
@@ -189,7 +259,7 @@ export class ProjectUtils {
 	 * @param step - Optional number setting value step
 	 * @returns A Promise that resolves when the state is checked, created (if necessary), and updated.
 	 */
-	protected async checkAndSetValueNumber(
+	async checkAndSetValueNumber(
 		stateName: string,
 		value: number,
 		description = "-",
@@ -244,7 +314,7 @@ export class ProjectUtils {
 	 * @param forceMode - Optional boolean indicating if the state should be overwritten if it already exists (default is false).
 	 * @returns A Promise that resolves when the state is checked, created (if necessary), and updated.
 	 */
-	protected async checkAndSetValueBoolean(
+	async checkAndSetValueBoolean(
 		stateName: string,
 		value: boolean,
 		description = "-",

@@ -3,9 +3,11 @@
 import * as utils from "@iobroker/adapter-core";
 
 import { GoodWeUdp } from "./lib/goodWeUdp.js";
+import { ProjectUtils } from "./lib/projectUtils.js";
 
 class Goodwe extends utils.Adapter {
 	private readonly inverter = new GoodWeUdp(this);
+	private readonly projectUtils = new ProjectUtils(this);
 	private tmrTimeout: ioBroker.Timeout | undefined;
 	private cycleCnt = 0;
 
@@ -25,11 +27,6 @@ class Goodwe extends utils.Adapter {
 	 * Is called when databases are connected and adapter received configuration.
 	 */
 	private async onReady(): Promise<void> {
-		this.createObjectsDeviceInfo();
-		this.createObjectsRunningData();
-		this.createObjectsExtComData();
-		this.createObjectsBmsInfo();
-
 		void this.setState("info.connection", false, true);
 
 		this.inverter.Connect(this.config.ipAddr, 8899);
@@ -70,349 +67,140 @@ class Goodwe extends utils.Adapter {
 		}
 	}
 
-	private createObjectsDeviceInfo(): void {
-		void this.setObjectNotExistsAsync("DeviceInfo", { type: "channel", common: { name: "DeviceInfo" }, native: {} });
-		this.createObjectStateNumber("DeviceInfo", "ModbusProtocolVersion");
-		this.createObjectStateNumber("DeviceInfo", "RatedPower");
-		this.createObjectStateNumber("DeviceInfo", "AcOutputType");
-		this.createObjectStateString("DeviceInfo", "SerialNumber");
-		this.createObjectStateString("DeviceInfo", "DeviceType");
-		this.createObjectStateNumber("DeviceInfo", "DSP1_SW_Version");
-		this.createObjectStateNumber("DeviceInfo", "DSP2_SW_Version");
-		this.createObjectStateNumber("DeviceInfo", "DSP_SVN_Version");
-		this.createObjectStateNumber("DeviceInfo", "ARM_SW_Version");
-		this.createObjectStateNumber("DeviceInfo", "ARM_SVN_Version");
-		this.createObjectStateString("DeviceInfo", "DSP_Int_FW_Version");
-		this.createObjectStateString("DeviceInfo", "ARM_Int_FW_Version");
-	}
-
-	private createObjectsRunningData(): void {
-		void this.setObjectNotExistsAsync("RunningData", { type: "channel", common: { name: "RunningData" }, native: {} });
-		this.createObjectsDcParameters("RunningData", "PV1");
-		this.createObjectsDcParameters("RunningData", "PV2");
-		this.createObjectsDcParameters("RunningData", "PV3");
-		this.createObjectsDcParameters("RunningData", "PV4");
-		this.createObjectsAcPhase("RunningData", "GridL1");
-		this.createObjectsAcPhase("RunningData", "GridL2");
-		this.createObjectsAcPhase("RunningData", "GridL3");
-		this.createObjectStateNumber("RunningData", "GridMode");
-		this.createObjectStateNumber("RunningData", "InverterTotalPower");
-		this.createObjectStateNumber("RunningData", "AcActivePower");
-		this.createObjectStateNumber("RunningData", "AcReactivePower");
-		this.createObjectStateNumber("RunningData", "AcApparentPower");
-		this.createObjectsPhaseBackUp("RunningData", "BackUpL1");
-		this.createObjectsPhaseBackUp("RunningData", "BackUpL2");
-		this.createObjectsPhaseBackUp("RunningData", "BackUpL3");
-		this.createObjectStateNumber("RunningData", "PowerL1");
-		this.createObjectStateNumber("RunningData", "PowerL2");
-		this.createObjectStateNumber("RunningData", "PowerL3");
-		this.createObjectStateNumber("RunningData", "TotalPowerBackUp");
-		this.createObjectStateNumber("RunningData", "TotalPower");
-		this.createObjectStateNumber("RunningData", "UpsLoadPercent");
-		this.createObjectStateNumber("RunningData", "AirTemperature");
-		this.createObjectStateNumber("RunningData", "ModulTemperature");
-		this.createObjectStateNumber("RunningData", "RadiatorTemperature");
-		this.createObjectStateNumber("RunningData", "FunctionBitValue");
-		this.createObjectStateNumber("RunningData", "BusVoltage");
-		this.createObjectStateNumber("RunningData", "NbusVoltage");
-		this.createObjectsDcParameters("RunningData", "Battery1");
-		this.createObjectStateNumber("RunningData", "WarningCode");
-		this.createObjectStateNumber("RunningData", "SaftyCountry");
-		this.createObjectStateNumber("RunningData", "WorkMode");
-		this.createObjectStateNumber("RunningData", "OperationMode");
-		this.createObjectStateNumber("RunningData", "ErrorMessage");
-		this.createObjectStateNumber("RunningData", "PvEnergyTotal");
-		this.createObjectStateNumber("RunningData", "PvEnergyDay");
-		this.createObjectStateNumber("RunningData", "EnergyTotal");
-		this.createObjectStateNumber("RunningData", "HoursTotal");
-		this.createObjectStateNumber("RunningData", "EnergyDaySell");
-		this.createObjectStateNumber("RunningData", "EnergyTotalBuy");
-		this.createObjectStateNumber("RunningData", "EnergyDayBuy");
-		this.createObjectStateNumber("RunningData", "EnergyTotalLoad");
-		this.createObjectStateNumber("RunningData", "EnergyDayLoad");
-		this.createObjectStateNumber("RunningData", "EnergyBatteryCharge");
-		this.createObjectStateNumber("RunningData", "EnergyDayCharge");
-		this.createObjectStateNumber("RunningData", "EnergyBatteryDischarge");
-		this.createObjectStateNumber("RunningData", "EnergyDayDischarge");
-		this.createObjectStateNumber("RunningData", "BatteryStrings");
-		this.createObjectStateNumber("RunningData", "CpldWarningCode");
-		this.createObjectStateNumber("RunningData", "WChargeCtrFlag");
-		this.createObjectStateNumber("RunningData", "DerateFrozenPower");
-		this.createObjectStateNumber("RunningData", "DiagStatusH");
-		this.createObjectStateNumber("RunningData", "DiagStatusL");
-		this.createObjectStateNumber("RunningData", "TotalPowerPv");
-	}
-
-	private createObjectsExtComData(): void {
-		void this.setObjectNotExistsAsync("ExtComData", { type: "channel", common: { name: "ExtComData" }, native: {} });
-		this.createObjectStateNumber("ExtComData", "Commode");
-		this.createObjectStateNumber("ExtComData", "Rssi");
-		this.createObjectStateNumber("ExtComData", "ManufacturerCode");
-		this.createObjectStateNumber("ExtComData", "MeterConnectStatus");
-		this.createObjectStateNumber("ExtComData", "MeterCommunicateStatus");
-		this.createObjectMeterPhase("ExtComData", "L1");
-		this.createObjectMeterPhase("ExtComData", "L2");
-		this.createObjectMeterPhase("ExtComData", "L3");
-		this.createObjectStateNumber("ExtComData", "TotalActivePower");
-		this.createObjectStateNumber("ExtComData", "TotalReactivePower");
-		this.createObjectStateNumber("ExtComData", "PowerFactor");
-		this.createObjectStateNumber("ExtComData", "Frequency");
-		this.createObjectStateNumber("ExtComData", "EnergyTotalSell");
-		this.createObjectStateNumber("ExtComData", "EnergyTotalBuy");
-	}
-
-	private createObjectsBmsInfo(): void {
-		void this.setObjectNotExistsAsync("BMSInfo", { type: "channel", common: { name: "BMSInfo" }, native: {} });
-		this.createObjectStateNumber("BMSInfo", "Status");
-		this.createObjectStateNumber("BMSInfo", "PackTemperature");
-		this.createObjectStateNumber("BMSInfo", "CurrentMaxCharge");
-		this.createObjectStateNumber("BMSInfo", "CurrentMaxDischarge");
-		this.createObjectStateNumber("BMSInfo", "ErrorCode");
-		this.createObjectStateNumber("BMSInfo", "SOC");
-		this.createObjectStateNumber("BMSInfo", "SOH");
-		this.createObjectStateNumber("BMSInfo", "BatteryStrings");
-	}
-
-	/**
-	 * Creates a numeric state object if it does not already exist.
-	 *
-	 * @param path Channel path
-	 * @param name State name
-	 */
-	private createObjectStateNumber(path: string, name: string): void {
-		void this.setObjectNotExistsAsync(`${path}.${name}`, {
-			type: "state",
-			common: { name, type: "number", role: "value", read: true, write: false },
-			native: {},
-		});
-	}
-
-	/**
-	 * Creates a string state object if it does not already exist.
-	 *
-	 * @param path Channel path
-	 * @param name State name
-	 */
-	private createObjectStateString(path: string, name: string): void {
-		void this.setObjectNotExistsAsync(`${path}.${name}`, {
-			type: "state",
-			common: { name, type: "string", role: "text", read: true, write: false },
-			native: {},
-		});
-	}
-
-	/**
-	 * Creates a DC parameters channel (Voltage, Current, Power, Mode) if it does not already exist.
-	 *
-	 * @param path Parent channel path
-	 * @param name Channel name
-	 */
-	private createObjectsDcParameters(path: string, name: string): void {
-		void this.setObjectNotExistsAsync(`${path}.${name}`, { type: "channel", common: { name }, native: {} });
-		for (const field of ["Voltage", "Current", "Power", "Mode"]) {
-			void this.setObjectNotExistsAsync(`${path}.${name}.${field}`, {
-				type: "state",
-				common: { name: field, type: "number", role: "value", read: true, write: false },
-				native: {},
-			});
-		}
-	}
-
-	/**
-	 * Creates an AC phase channel (Voltage, Current, Frequency, Power) if it does not already exist.
-	 *
-	 * @param path Parent channel path
-	 * @param name Channel name
-	 */
-	private createObjectsAcPhase(path: string, name: string): void {
-		void this.setObjectNotExistsAsync(`${path}.${name}`, { type: "channel", common: { name }, native: {} });
-		for (const field of ["Voltage", "Current", "Frequency", "Power"]) {
-			void this.setObjectNotExistsAsync(`${path}.${name}.${field}`, {
-				type: "state",
-				common: { name: field, type: "number", role: "value", read: true, write: false },
-				native: {},
-			});
-		}
-	}
-
-	/**
-	 * Creates a backup phase channel (Voltage, Current, Frequency, Power, Mode) if it does not already exist.
-	 *
-	 * @param path Parent channel path
-	 * @param name Channel name
-	 */
-	private createObjectsPhaseBackUp(path: string, name: string): void {
-		void this.setObjectNotExistsAsync(`${path}.${name}`, { type: "channel", common: { name }, native: {} });
-		for (const field of ["Voltage", "Current", "Frequency", "Power", "Mode"]) {
-			void this.setObjectNotExistsAsync(`${path}.${name}.${field}`, {
-				type: "state",
-				common: { name: field, type: "number", role: "value", read: true, write: false },
-				native: {},
-			});
-		}
-	}
-
-	/**
-	 * Creates a meter phase channel (ActivePower, PowerFactor) if it does not already exist.
-	 *
-	 * @param path Parent channel path
-	 * @param name Channel name
-	 */
-	private createObjectMeterPhase(path: string, name: string): void {
-		void this.setObjectNotExistsAsync(`${path}.${name}`, { type: "channel", common: { name }, native: {} });
-		for (const field of ["ActivePower", "PowerFactor"]) {
-			void this.setObjectNotExistsAsync(`${path}.${name}.${field}`, {
-				type: "state",
-				common: { name: field, type: "number", role: "value", read: true, write: false },
-				native: {},
-			});
-		}
-	}
-
-	private updateDeviceInfo(): void {
+	private async updateDeviceInfo(): Promise<void> {
 		this.inverter.ReadDeviceInfo();
-		void this.setStateAsync("DeviceInfo.ModbusProtocolVersion", this.inverter.DeviceInfo.ModbusProtocolVersion, true);
-		void this.setStateAsync("DeviceInfo.RatedPower", this.inverter.DeviceInfo.RatedPower, true);
-		void this.setStateAsync("DeviceInfo.AcOutputType", this.inverter.DeviceInfo.AcOutputType, true);
-		void this.setStateAsync("DeviceInfo.SerialNumber", this.inverter.DeviceInfo.SerialNumber, true);
-		void this.setStateAsync("DeviceInfo.DeviceType", this.inverter.DeviceInfo.DeviceType, true);
-		void this.setStateAsync("DeviceInfo.DSP1_SW_Version", this.inverter.DeviceInfo.DSP1_SoftwareVersion, true);
-		void this.setStateAsync("DeviceInfo.DSP2_SW_Version", this.inverter.DeviceInfo.DSP2_SoftwareVersion, true);
-		void this.setStateAsync("DeviceInfo.DSP_SVN_Version", this.inverter.DeviceInfo.DSP_SVN_Version, true);
-		void this.setStateAsync("DeviceInfo.ARM_SW_Version", this.inverter.DeviceInfo.ARM_SoftwareVersion, true);
-		void this.setStateAsync("DeviceInfo.ARM_SVN_Version", this.inverter.DeviceInfo.ARM_SVN_Version, true);
-		void this.setStateAsync("DeviceInfo.DSP_Int_FW_Version", this.inverter.DeviceInfo.DSP_IntFirmwareVersion, true);
-		void this.setStateAsync("DeviceInfo.ARM_Int_FW_Version", this.inverter.DeviceInfo.ARM_IntFirmwareVersion, true);
+		const di = this.inverter.DeviceInfo;
+		await this.projectUtils.checkAndSetChannel("DeviceInfo", "DeviceInfo");
+		await this.projectUtils.checkAndSetValueNumber("DeviceInfo.ModbusProtocolVersion", di.ModbusProtocolVersion);
+		await this.projectUtils.checkAndSetValueNumber("DeviceInfo.RatedPower", di.RatedPower);
+		await this.projectUtils.checkAndSetValueNumber("DeviceInfo.AcOutputType", di.AcOutputType);
+		await this.projectUtils.checkAndSetValue("DeviceInfo.SerialNumber", di.SerialNumber);
+		await this.projectUtils.checkAndSetValue("DeviceInfo.DeviceType", di.DeviceType);
+		await this.projectUtils.checkAndSetValueNumber("DeviceInfo.DSP1_SW_Version", di.DSP1_SoftwareVersion);
+		await this.projectUtils.checkAndSetValueNumber("DeviceInfo.DSP2_SW_Version", di.DSP2_SoftwareVersion);
+		await this.projectUtils.checkAndSetValueNumber("DeviceInfo.DSP_SVN_Version", di.DSP_SVN_Version);
+		await this.projectUtils.checkAndSetValueNumber("DeviceInfo.ARM_SW_Version", di.ARM_SoftwareVersion);
+		await this.projectUtils.checkAndSetValueNumber("DeviceInfo.ARM_SVN_Version", di.ARM_SVN_Version);
+		await this.projectUtils.checkAndSetValue("DeviceInfo.DSP_Int_FW_Version", di.DSP_IntFirmwareVersion);
+		await this.projectUtils.checkAndSetValue("DeviceInfo.ARM_Int_FW_Version", di.ARM_IntFirmwareVersion);
 		void this.setStateAsync("info.connection", this.inverter.Status, true);
 	}
 
-	private updateRunningData(): void {
+	private async updateRunningData(): Promise<void> {
 		this.inverter.ReadRunningData();
 		const rd = this.inverter.RunningData;
-		void this.setStateAsync("RunningData.PV1.Voltage", rd.Pv1.Voltage, true);
-		void this.setStateAsync("RunningData.PV1.Current", rd.Pv1.Current, true);
-		void this.setStateAsync("RunningData.PV1.Power", rd.Pv1.Power, true);
-		void this.setStateAsync("RunningData.PV1.Mode", rd.Pv1.Mode, true);
-		void this.setStateAsync("RunningData.PV2.Voltage", rd.Pv2.Voltage, true);
-		void this.setStateAsync("RunningData.PV2.Current", rd.Pv2.Current, true);
-		void this.setStateAsync("RunningData.PV2.Power", rd.Pv2.Power, true);
-		void this.setStateAsync("RunningData.PV2.Mode", rd.Pv2.Mode, true);
-		void this.setStateAsync("RunningData.PV3.Voltage", rd.Pv3.Voltage, true);
-		void this.setStateAsync("RunningData.PV3.Current", rd.Pv3.Current, true);
-		void this.setStateAsync("RunningData.PV3.Power", rd.Pv3.Power, true);
-		void this.setStateAsync("RunningData.PV3.Mode", rd.Pv3.Mode, true);
-		void this.setStateAsync("RunningData.PV4.Voltage", rd.Pv4.Voltage, true);
-		void this.setStateAsync("RunningData.PV4.Current", rd.Pv4.Current, true);
-		void this.setStateAsync("RunningData.PV4.Power", rd.Pv4.Power, true);
-		void this.setStateAsync("RunningData.PV4.Mode", rd.Pv4.Mode, true);
-		void this.setStateAsync("RunningData.GridL1.Voltage", rd.GridL1.Voltage, true);
-		void this.setStateAsync("RunningData.GridL1.Current", rd.GridL1.Current, true);
-		void this.setStateAsync("RunningData.GridL1.Frequency", rd.GridL1.Frequency, true);
-		void this.setStateAsync("RunningData.GridL1.Power", rd.GridL1.Power, true);
-		void this.setStateAsync("RunningData.GridL2.Voltage", rd.GridL2.Voltage, true);
-		void this.setStateAsync("RunningData.GridL2.Current", rd.GridL2.Current, true);
-		void this.setStateAsync("RunningData.GridL2.Frequency", rd.GridL2.Frequency, true);
-		void this.setStateAsync("RunningData.GridL2.Power", rd.GridL2.Power, true);
-		void this.setStateAsync("RunningData.GridL3.Voltage", rd.GridL3.Voltage, true);
-		void this.setStateAsync("RunningData.GridL3.Current", rd.GridL3.Current, true);
-		void this.setStateAsync("RunningData.GridL3.Frequency", rd.GridL3.Frequency, true);
-		void this.setStateAsync("RunningData.GridL3.Power", rd.GridL3.Power, true);
-		void this.setStateAsync("RunningData.GridMode", rd.GridMode, true);
-		void this.setStateAsync("RunningData.InverterTotalPower", rd.InverterTotalPower, true);
-		void this.setStateAsync("RunningData.AcActivePower", rd.AcActivePower, true);
-		void this.setStateAsync("RunningData.AcReactivePower", rd.AcReactivePower, true);
-		void this.setStateAsync("RunningData.AcApparentPower", rd.AcApparentPower, true);
-		void this.setStateAsync("RunningData.BackUpL1.Voltage", rd.BackUpL1.Voltage, true);
-		void this.setStateAsync("RunningData.BackUpL1.Current", rd.BackUpL1.Current, true);
-		void this.setStateAsync("RunningData.BackUpL1.Frequency", rd.BackUpL1.Frequency, true);
-		void this.setStateAsync("RunningData.BackUpL1.Power", rd.BackUpL1.Power, true);
-		void this.setStateAsync("RunningData.BackUpL1.Mode", rd.BackUpL1.Mode, true);
-		void this.setStateAsync("RunningData.BackUpL2.Voltage", rd.BackUpL2.Voltage, true);
-		void this.setStateAsync("RunningData.BackUpL2.Current", rd.BackUpL2.Current, true);
-		void this.setStateAsync("RunningData.BackUpL2.Frequency", rd.BackUpL2.Frequency, true);
-		void this.setStateAsync("RunningData.BackUpL2.Power", rd.BackUpL2.Power, true);
-		void this.setStateAsync("RunningData.BackUpL2.Mode", rd.BackUpL2.Mode, true);
-		void this.setStateAsync("RunningData.BackUpL3.Voltage", rd.BackUpL3.Voltage, true);
-		void this.setStateAsync("RunningData.BackUpL3.Current", rd.BackUpL3.Current, true);
-		void this.setStateAsync("RunningData.BackUpL3.Frequency", rd.BackUpL3.Frequency, true);
-		void this.setStateAsync("RunningData.BackUpL3.Power", rd.BackUpL3.Power, true);
-		void this.setStateAsync("RunningData.BackUpL3.Mode", rd.BackUpL3.Mode, true);
-		void this.setStateAsync("RunningData.PowerL1", rd.PowerL1, true);
-		void this.setStateAsync("RunningData.PowerL2", rd.PowerL2, true);
-		void this.setStateAsync("RunningData.PowerL3", rd.PowerL3, true);
-		void this.setStateAsync("RunningData.TotalPowerBackUp", rd.TotalPowerBackUp, true);
-		void this.setStateAsync("RunningData.TotalPower", rd.TotalPower, true);
-		void this.setStateAsync("RunningData.UpsLoadPercent", rd.UpsLoadPercent, true);
-		void this.setStateAsync("RunningData.AirTemperature", rd.AirTemperature, true);
-		void this.setStateAsync("RunningData.ModulTemperature", rd.ModulTemperature, true);
-		void this.setStateAsync("RunningData.RadiatorTemperature", rd.RadiatorTemperature, true);
-		void this.setStateAsync("RunningData.FunctionBitValue", rd.FunctionBitValue, true);
-		void this.setStateAsync("RunningData.BusVoltage", rd.BusVoltage, true);
-		void this.setStateAsync("RunningData.NbusVoltage", rd.NbusVoltage, true);
-		void this.setStateAsync("RunningData.Battery1.Voltage", rd.Battery1.Voltage, true);
-		void this.setStateAsync("RunningData.Battery1.Current", rd.Battery1.Current, true);
-		void this.setStateAsync("RunningData.Battery1.Power", rd.Battery1.Power, true);
-		void this.setStateAsync("RunningData.Battery1.Mode", rd.Battery1.Mode, true);
-		void this.setStateAsync("RunningData.WarningCode", rd.WarningCode, true);
-		void this.setStateAsync("RunningData.SaftyCountry", rd.SaftyCountry, true);
-		void this.setStateAsync("RunningData.WorkMode", rd.WorkMode, true);
-		void this.setStateAsync("RunningData.OperationMode", rd.OperationMode, true);
-		void this.setStateAsync("RunningData.ErrorMessage", rd.ErrorMessage, true);
-		void this.setStateAsync("RunningData.PvEnergyTotal", rd.PvEnergyTotal, true);
-		void this.setStateAsync("RunningData.PvEnergyDay", rd.PvEnergyDay, true);
-		void this.setStateAsync("RunningData.EnergyTotal", rd.EnergyTotal, true);
-		void this.setStateAsync("RunningData.HoursTotal", rd.HoursTotal, true);
-		void this.setStateAsync("RunningData.EnergyDaySell", rd.EnergyDaySell, true);
-		void this.setStateAsync("RunningData.EnergyTotalBuy", rd.EnergyTotalBuy, true);
-		void this.setStateAsync("RunningData.EnergyDayBuy", rd.EnergyDayBuy, true);
-		void this.setStateAsync("RunningData.EnergyTotalLoad", rd.EnergyTotalLoad, true);
-		void this.setStateAsync("RunningData.EnergyDayLoad", rd.EnergyDayLoad, true);
-		void this.setStateAsync("RunningData.EnergyBatteryCharge", rd.EnergyBatteryCharge, true);
-		void this.setStateAsync("RunningData.EnergyDayCharge", rd.EnergyDayCharge, true);
-		void this.setStateAsync("RunningData.EnergyBatteryDischarge", rd.EnergyBatteryDischarge, true);
-		void this.setStateAsync("RunningData.EnergyDayDischarge", rd.EnergyDayDischarge, true);
-		void this.setStateAsync("RunningData.BatteryStrings", rd.BatteryStrings, true);
-		void this.setStateAsync("RunningData.CpldWarningCode", rd.CpldWarningCode, true);
-		void this.setStateAsync("RunningData.WChargeCtrFlag", rd.WChargeCtrFlag, true);
-		void this.setStateAsync("RunningData.DerateFrozenPower", rd.DerateFrozenPower, true);
-		void this.setStateAsync("RunningData.DiagStatusH", rd.DiagStatusH, true);
-		void this.setStateAsync("RunningData.DiagStatusL", rd.DiagStatusL, true);
-		void this.setStateAsync("RunningData.TotalPowerPv", rd.TotalPowerPv, true);
+		await this.projectUtils.checkAndSetChannel("RunningData", "RunningData");
+		await this.projectUtils.updateDcParameters("RunningData", "PV1", rd.Pv1.Voltage, rd.Pv1.Current, rd.Pv1.Power, rd.Pv1.Mode);
+		await this.projectUtils.updateDcParameters("RunningData", "PV2", rd.Pv2.Voltage, rd.Pv2.Current, rd.Pv2.Power, rd.Pv2.Mode);
+		await this.projectUtils.updateDcParameters("RunningData", "PV3", rd.Pv3.Voltage, rd.Pv3.Current, rd.Pv3.Power, rd.Pv3.Mode);
+		await this.projectUtils.updateDcParameters("RunningData", "PV4", rd.Pv4.Voltage, rd.Pv4.Current, rd.Pv4.Power, rd.Pv4.Mode);
+		await this.projectUtils.updateAcPhase("RunningData", "GridL1", rd.GridL1.Voltage, rd.GridL1.Current, rd.GridL1.Frequency, rd.GridL1.Power);
+		await this.projectUtils.updateAcPhase("RunningData", "GridL2", rd.GridL2.Voltage, rd.GridL2.Current, rd.GridL2.Frequency, rd.GridL2.Power);
+		await this.projectUtils.updateAcPhase("RunningData", "GridL3", rd.GridL3.Voltage, rd.GridL3.Current, rd.GridL3.Frequency, rd.GridL3.Power);
+		await this.projectUtils.checkAndSetValueNumber("RunningData.GridMode", rd.GridMode);
+		await this.projectUtils.checkAndSetValueNumber("RunningData.InverterTotalPower", rd.InverterTotalPower);
+		await this.projectUtils.checkAndSetValueNumber("RunningData.AcActivePower", rd.AcActivePower);
+		await this.projectUtils.checkAndSetValueNumber("RunningData.AcReactivePower", rd.AcReactivePower);
+		await this.projectUtils.checkAndSetValueNumber("RunningData.AcApparentPower", rd.AcApparentPower);
+		await this.projectUtils.updateAcPhaseBackup(
+			"RunningData",
+			"BackUpL1",
+			rd.BackUpL1.Voltage,
+			rd.BackUpL1.Current,
+			rd.BackUpL1.Frequency,
+			rd.BackUpL1.Power,
+			rd.BackUpL1.Mode,
+		);
+		await this.projectUtils.updateAcPhaseBackup(
+			"RunningData",
+			"BackUpL2",
+			rd.BackUpL2.Voltage,
+			rd.BackUpL2.Current,
+			rd.BackUpL2.Frequency,
+			rd.BackUpL2.Power,
+			rd.BackUpL2.Mode,
+		);
+		await this.projectUtils.updateAcPhaseBackup(
+			"RunningData",
+			"BackUpL3",
+			rd.BackUpL3.Voltage,
+			rd.BackUpL3.Current,
+			rd.BackUpL3.Frequency,
+			rd.BackUpL3.Power,
+			rd.BackUpL3.Mode,
+		);
+		await this.projectUtils.checkAndSetValueNumber("RunningData.PowerL1", rd.PowerL1);
+		await this.projectUtils.checkAndSetValueNumber("RunningData.PowerL2", rd.PowerL2);
+		await this.projectUtils.checkAndSetValueNumber("RunningData.PowerL3", rd.PowerL3);
+		await this.projectUtils.checkAndSetValueNumber("RunningData.TotalPowerBackUp", rd.TotalPowerBackUp);
+		await this.projectUtils.checkAndSetValueNumber("RunningData.TotalPower", rd.TotalPower);
+		await this.projectUtils.checkAndSetValueNumber("RunningData.UpsLoadPercent", rd.UpsLoadPercent);
+		await this.projectUtils.checkAndSetValueNumber("RunningData.AirTemperature", rd.AirTemperature);
+		await this.projectUtils.checkAndSetValueNumber("RunningData.ModulTemperature", rd.ModulTemperature);
+		await this.projectUtils.checkAndSetValueNumber("RunningData.RadiatorTemperature", rd.RadiatorTemperature);
+		await this.projectUtils.checkAndSetValueNumber("RunningData.FunctionBitValue", rd.FunctionBitValue);
+		await this.projectUtils.checkAndSetValueNumber("RunningData.BusVoltage", rd.BusVoltage);
+		await this.projectUtils.checkAndSetValueNumber("RunningData.NbusVoltage", rd.NbusVoltage);
+		await this.projectUtils.updateDcParameters("RunningData", "Battery1", rd.Battery1.Voltage, rd.Battery1.Current, rd.Battery1.Power, rd.Battery1.Mode);
+		await this.projectUtils.checkAndSetValueNumber("RunningData.WarningCode", rd.WarningCode);
+		await this.projectUtils.checkAndSetValueNumber("RunningData.SaftyCountry", rd.SaftyCountry);
+		await this.projectUtils.checkAndSetValueNumber("RunningData.WorkMode", rd.WorkMode);
+		await this.projectUtils.checkAndSetValueNumber("RunningData.OperationMode", rd.OperationMode);
+		await this.projectUtils.checkAndSetValueNumber("RunningData.ErrorMessage", rd.ErrorMessage);
+		await this.projectUtils.checkAndSetValueNumber("RunningData.PvEnergyTotal", rd.PvEnergyTotal);
+		await this.projectUtils.checkAndSetValueNumber("RunningData.PvEnergyDay", rd.PvEnergyDay);
+		await this.projectUtils.checkAndSetValueNumber("RunningData.EnergyTotal", rd.EnergyTotal);
+		await this.projectUtils.checkAndSetValueNumber("RunningData.HoursTotal", rd.HoursTotal);
+		await this.projectUtils.checkAndSetValueNumber("RunningData.EnergyDaySell", rd.EnergyDaySell);
+		await this.projectUtils.checkAndSetValueNumber("RunningData.EnergyTotalBuy", rd.EnergyTotalBuy);
+		await this.projectUtils.checkAndSetValueNumber("RunningData.EnergyDayBuy", rd.EnergyDayBuy);
+		await this.projectUtils.checkAndSetValueNumber("RunningData.EnergyTotalLoad", rd.EnergyTotalLoad);
+		await this.projectUtils.checkAndSetValueNumber("RunningData.EnergyDayLoad", rd.EnergyDayLoad);
+		await this.projectUtils.checkAndSetValueNumber("RunningData.EnergyBatteryCharge", rd.EnergyBatteryCharge);
+		await this.projectUtils.checkAndSetValueNumber("RunningData.EnergyDayCharge", rd.EnergyDayCharge);
+		await this.projectUtils.checkAndSetValueNumber("RunningData.EnergyBatteryDischarge", rd.EnergyBatteryDischarge);
+		await this.projectUtils.checkAndSetValueNumber("RunningData.EnergyDayDischarge", rd.EnergyDayDischarge);
+		await this.projectUtils.checkAndSetValueNumber("RunningData.BatteryStrings", rd.BatteryStrings);
+		await this.projectUtils.checkAndSetValueNumber("RunningData.CpldWarningCode", rd.CpldWarningCode);
+		await this.projectUtils.checkAndSetValueNumber("RunningData.WChargeCtrFlag", rd.WChargeCtrFlag);
+		await this.projectUtils.checkAndSetValueNumber("RunningData.DerateFrozenPower", rd.DerateFrozenPower);
+		await this.projectUtils.checkAndSetValueNumber("RunningData.DiagStatusH", rd.DiagStatusH);
+		await this.projectUtils.checkAndSetValueNumber("RunningData.DiagStatusL", rd.DiagStatusL);
+		await this.projectUtils.checkAndSetValueNumber("RunningData.TotalPowerPv", rd.TotalPowerPv);
 	}
 
-	private updateExtComData(): void {
+	private async updateExtComData(): Promise<void> {
 		this.inverter.ReadExtComData();
 		const ec = this.inverter.ExtComData;
-		void this.setStateAsync("ExtComData.Commode", ec.Commode, true);
-		void this.setStateAsync("ExtComData.Rssi", ec.Rssi, true);
-		void this.setStateAsync("ExtComData.ManufacturerCode", ec.ManufacturerCode, true);
-		void this.setStateAsync("ExtComData.MeterConnectStatus", ec.MeterConnectStatus, true);
-		void this.setStateAsync("ExtComData.MeterCommunicateStatus", ec.MeterCommunicateStatus, true);
-		void this.setStateAsync("ExtComData.L1.ActivePower", ec.L1.ActivePower, true);
-		void this.setStateAsync("ExtComData.L1.PowerFactor", ec.L1.PowerFactor, true);
-		void this.setStateAsync("ExtComData.L2.ActivePower", ec.L2.ActivePower, true);
-		void this.setStateAsync("ExtComData.L2.PowerFactor", ec.L2.PowerFactor, true);
-		void this.setStateAsync("ExtComData.L3.ActivePower", ec.L3.ActivePower, true);
-		void this.setStateAsync("ExtComData.L3.PowerFactor", ec.L3.PowerFactor, true);
-		void this.setStateAsync("ExtComData.TotalActivePower", ec.TotalActivePower, true);
-		void this.setStateAsync("ExtComData.TotalReactivePower", ec.TotalReactivePower, true);
-		void this.setStateAsync("ExtComData.PowerFactor", ec.PowerFactor, true);
-		void this.setStateAsync("ExtComData.Frequency", ec.Frequency, true);
-		void this.setStateAsync("ExtComData.EnergyTotalSell", ec.EnergyTotalSell, true);
-		void this.setStateAsync("ExtComData.EnergyTotalBuy", ec.EnergyTotalBuy, true);
+		await this.projectUtils.checkAndSetChannel("ExtComData", "ExtComData");
+		await this.projectUtils.checkAndSetValueNumber("ExtComData.Commode", ec.Commode);
+		await this.projectUtils.checkAndSetValueNumber("ExtComData.Rssi", ec.Rssi);
+		await this.projectUtils.checkAndSetValueNumber("ExtComData.ManufacturerCode", ec.ManufacturerCode);
+		await this.projectUtils.checkAndSetValueNumber("ExtComData.MeterConnectStatus", ec.MeterConnectStatus);
+		await this.projectUtils.checkAndSetValueNumber("ExtComData.MeterCommunicateStatus", ec.MeterCommunicateStatus);
+		await this.projectUtils.updateMeterPhase("ExtComData", "L1", ec.L1.ActivePower, ec.L1.PowerFactor);
+		await this.projectUtils.updateMeterPhase("ExtComData", "L2", ec.L2.ActivePower, ec.L2.PowerFactor);
+		await this.projectUtils.updateMeterPhase("ExtComData", "L3", ec.L3.ActivePower, ec.L3.PowerFactor);
+		await this.projectUtils.checkAndSetValueNumber("ExtComData.TotalActivePower", ec.TotalActivePower);
+		await this.projectUtils.checkAndSetValueNumber("ExtComData.TotalReactivePower", ec.TotalReactivePower);
+		await this.projectUtils.checkAndSetValueNumber("ExtComData.PowerFactor", ec.PowerFactor);
+		await this.projectUtils.checkAndSetValueNumber("ExtComData.Frequency", ec.Frequency);
+		await this.projectUtils.checkAndSetValueNumber("ExtComData.EnergyTotalSell", ec.EnergyTotalSell);
+		await this.projectUtils.checkAndSetValueNumber("ExtComData.EnergyTotalBuy", ec.EnergyTotalBuy);
 	}
 
-	private updateBmsInfo(): void {
+	private async updateBmsInfo(): Promise<void> {
 		this.inverter.ReadBmsInfo();
 		const bms = this.inverter.BmsInfo;
-		void this.setStateAsync("BMSInfo.Status", bms.Status, true);
-		void this.setStateAsync("BMSInfo.PackTemperature", bms.PackTemperature, true);
-		void this.setStateAsync("BMSInfo.CurrentMaxCharge", bms.CurrentMaxCharge, true);
-		void this.setStateAsync("BMSInfo.CurrentMaxDischarge", bms.CurrentMaxDischarge, true);
-		void this.setStateAsync("BMSInfo.ErrorCode", bms.ErrorCode, true);
-		void this.setStateAsync("BMSInfo.SOC", bms.SOC, true);
-		void this.setStateAsync("BMSInfo.SOH", bms.SOH, true);
-		void this.setStateAsync("BMSInfo.BatteryStrings", bms.BatteryStrings, true);
+		await this.projectUtils.checkAndSetChannel("BMSInfo", "BMSInfo");
+		await this.projectUtils.checkAndSetValueNumber("BMSInfo.Status", bms.Status);
+		await this.projectUtils.checkAndSetValueNumber("BMSInfo.PackTemperature", bms.PackTemperature);
+		await this.projectUtils.checkAndSetValueNumber("BMSInfo.CurrentMaxCharge", bms.CurrentMaxCharge);
+		await this.projectUtils.checkAndSetValueNumber("BMSInfo.CurrentMaxDischarge", bms.CurrentMaxDischarge);
+		await this.projectUtils.checkAndSetValueNumber("BMSInfo.ErrorCode", bms.ErrorCode);
+		await this.projectUtils.checkAndSetValueNumber("BMSInfo.SOC", bms.SOC);
+		await this.projectUtils.checkAndSetValueNumber("BMSInfo.SOH", bms.SOH);
+		await this.projectUtils.checkAndSetValueNumber("BMSInfo.BatteryStrings", bms.BatteryStrings);
 	}
 
 	private myTimer(): void {
@@ -422,16 +210,16 @@ class Goodwe extends utils.Adapter {
 		} else {
 			switch (this.cycleCnt) {
 				case 1:
-					this.updateDeviceInfo();
+					void this.updateDeviceInfo();
 					break;
 				case 3:
-					this.updateRunningData();
+					void this.updateRunningData();
 					break;
 				case 5:
-					this.updateExtComData();
+					void this.updateExtComData();
 					break;
 				case 7:
-					this.updateBmsInfo();
+					void this.updateBmsInfo();
 					break;
 			}
 
