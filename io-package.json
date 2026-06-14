@@ -50,6 +50,8 @@
     "keywords": [
       "GoodWe",
       "Inverter",
+      "power",
+      "energy",
       "ET",
       "EH",
       "BH",
@@ -57,12 +59,13 @@
     ],
     "license": "MIT",
     "platform": "Javascript/Node.js",
-    "main": "main.js",
+    "main": "build/main.js",
     "icon": "goodwe-pv.png",
     "enabled": true,
-    "extIcon": "https://raw.githubusercontent.com/hombach/ioBroker.goodwePV/main/admin/goodwe-pv.png",
-    "readme": "https://github.com/hombach/ioBroker.goodwePV/blob/main/README.md",
+    "extIcon": "https://raw.githubusercontent.com/hombach/ioBroker.goodwe-pv/master/admin/goodwe-pv.png",
+    "readme": "https://github.com/hombach/ioBroker.goodwe-pv/blob/master/README.md",
     "loglevel": "info",
+    "tier": 2,
     "mode": "daemon",
     "type": "energy",
     "compact": true,
@@ -73,12 +76,12 @@
     },
     "dependencies": [
       {
-        "js-controller": ">=3.3.22"
+        "js-controller": ">=6.0.11"
       }
     ],
     "globalDependencies": [
       {
-        "admin": ">=5.1.13"
+        "admin": ">=7.6.20"
       }
     ]
   },
