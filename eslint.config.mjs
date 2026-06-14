@@ -9,6 +9,7 @@ export default [
 	{
 		// specify files to exclude from linting here
 		ignores: [
+			"*.test.js",
 			"test/**/*.js",
 			"*.config.mjs",
 			"build",
