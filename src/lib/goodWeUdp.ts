@@ -1,15 +1,7 @@
-import * as utils from "@iobroker/adapter-core";
+import type * as utils from "@iobroker/adapter-core";
 import dgram from "node:dgram";
 
-import {
-	GoodWeDeviceInfo,
-	GoodWeExternalComData,
-	GoodWeIdInfo,
-	GoodWePacket,
-	GoodWeRegister,
-	GoodWeRunningData,
-	GoodweBmsInfo,
-} from "./goodWeTypes.js";
+import { GoodWeDeviceInfo, GoodWeExternalComData, GoodWeIdInfo, GoodWePacket, GoodWeRegister, GoodWeRunningData, GoodweBmsInfo } from "./goodWeTypes.js";
 
 /** UDP communication handler for GoodWe inverters (ET/EH/BH/BT series). */
 export class GoodWeUdp {
@@ -90,10 +82,12 @@ export class GoodWeUdp {
 			});
 
 			this.client.send(sendbuf, 0, sendbuf.length, this.port, this.ipAddr, err => {
-				if (err) throw err;
+				if (err) {
+					throw err;
+				}
 			});
 		} catch (error) {
-			this.adapter.log.error(`ReadIdInfo: ${error}`);
+			this.adapter.log.error(`ReadIdInfo: ${String(error)}`);
 		}
 	}
 
@@ -134,10 +128,12 @@ export class GoodWeUdp {
 			});
 
 			this.client.send(sendbuf, 0, sendbuf.length, this.port, this.ipAddr, err => {
-				if (err) throw err;
+				if (err) {
+					throw err;
+				}
 			});
 		} catch (error) {
-			this.adapter.log.error(`ReadDeviceInfo: ${error}`);
+			this.adapter.log.error(`ReadDeviceInfo: ${String(error)}`);
 		}
 	}
 
@@ -249,10 +245,7 @@ export class GoodWeUdp {
 					this.runningData.DiagStatusH = this.getUintFromByteArray(rcvbuf, 241, 4);
 					this.runningData.DiagStatusL = this.getUintFromByteArray(rcvbuf, 245, 4);
 					this.runningData.TotalPowerPv =
-						this.runningData.Pv1.Power +
-						this.runningData.Pv2.Power +
-						this.runningData.Pv3.Power +
-						this.runningData.Pv4.Power;
+						this.runningData.Pv1.Power + this.runningData.Pv2.Power + this.runningData.Pv3.Power + this.runningData.Pv4.Power;
 					this.status = GoodWeUdp.ConStatus.Online;
 				} else {
 					this.status = GoodWeUdp.ConStatus.Offline;
@@ -260,10 +253,12 @@ export class GoodWeUdp {
 			});
 
 			this.client.send(sendbuf, 0, sendbuf.length, this.port, this.ipAddr, err => {
-				if (err) throw err;
+				if (err) {
+					throw err;
+				}
 			});
 		} catch (error) {
-			this.adapter.log.error(`ReadRunningData: ${error}`);
+			this.adapter.log.error(`ReadRunningData: ${String(error)}`);
 		}
 	}
 
@@ -309,10 +304,12 @@ export class GoodWeUdp {
 			});
 
 			this.client.send(sendbuf, 0, sendbuf.length, this.port, this.ipAddr, err => {
-				if (err) throw err;
+				if (err) {
+					throw err;
+				}
 			});
 		} catch (error) {
-			this.adapter.log.error(`ReadExtComData: ${error}`);
+			this.adapter.log.error(`ReadExtComData: ${String(error)}`);
 		}
 	}
 
@@ -349,10 +346,12 @@ export class GoodWeUdp {
 			});
 
 			this.client.send(sendbuf, 0, sendbuf.length, this.port, this.ipAddr, err => {
-				if (err) throw err;
+				if (err) {
+					throw err;
+				}
 			});
 		} catch (error) {
-			this.adapter.log.error(`ReadBmsInfo: ${error}`);
+			this.adapter.log.error(`ReadBmsInfo: ${String(error)}`);
 		}
 	}
 
