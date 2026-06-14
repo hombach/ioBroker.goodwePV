@@ -1,5 +1,5 @@
 {
-  "name": "iobroker.goodwePV",
+  "name": "iobroker.goodwe-pv",
   "version": "0.0.1",
   "description": "Communication with GoodWe Inverter ET/EH/BH/BT Series",
   "author": {
@@ -72,17 +72,14 @@
     "test:js": "mocha --config test/mocharc.custom.json \"{!(node_modules|test)/**/*.test.js,*.test.js,test/**/test!(PackageFiles|Startup).js}\"",
     "test:package": "mocha test/package --exit",
     "test:integration": "mocha test/integration --exit",
-    "test": "npm run test:js && npm run test:package",
+    "test": "npm run test:js && npm run test:package && npm run test:integration",
     "check": "tsc --noEmit -p tsconfig.check.json",
     "lint": "eslint .",
     "translate": "translate-adapter",
-    "release": "release-script patch --yes",
-    "release-minor": "release-script minor --yes",
-    "release-major": "release-script major -- yes"
+    "release": "release-script"
   },
   "bugs": {
     "url": "https://github.com/hombach/ioBroker.goodwePV/issues"
   },
   "readmeFilename": "README.md"
 }
-

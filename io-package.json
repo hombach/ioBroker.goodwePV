@@ -1,6 +1,6 @@
 {
   "common": {
-    "name": "goodwePV",
+    "name": "goodwe-pv",
     "version": "0.0.1",
     "news": {
       "0.0.1": {
@@ -58,9 +58,9 @@
     "license": "MIT",
     "platform": "Javascript/Node.js",
     "main": "main.js",
-    "icon": "goodwePV.png",
+    "icon": "goodwe-pv.png",
     "enabled": true,
-    "extIcon": "https://raw.githubusercontent.com/hombach/ioBroker.goodwePV/main/admin/goodwePV.png",
+    "extIcon": "https://raw.githubusercontent.com/hombach/ioBroker.goodwePV/main/admin/goodwe-pv.png",
     "readme": "https://github.com/hombach/ioBroker.goodwePV/blob/main/README.md",
     "loglevel": "info",
     "mode": "daemon",

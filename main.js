@@ -23,7 +23,7 @@ class Goodwe extends utils.Adapter {
 	constructor(options) {
 		super({
 			...options,
-			name: "goodwePV",
+			name: "goodwe-pv",
 		});
 		this.on("ready", this.onReady.bind(this));
 		this.on("stateChange", this.onStateChange.bind(this));

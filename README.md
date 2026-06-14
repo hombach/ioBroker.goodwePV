@@ -1,32 +1,32 @@
-![Logo](admin/goodwePV.png)
+![Logo](admin/goodwe-pv.png)
 
-# ioBroker.goodwePV
+# iobroker.goodwe-pv
 
-[![NPM version](https://img.shields.io/npm/v/iobroker.goodwePV.svg)](https://www.npmjs.com/package/iobroker.goodwePV)
-[![Downloads](https://img.shields.io/npm/dm/iobroker.goodwePV.svg)](https://www.npmjs.com/package/iobroker.goodwePV)
-![node-lts](https://img.shields.io/node/v-lts/iobroker.goodwePV?style=flat-square)
-![Libraries.io dependency status for latest release](https://img.shields.io/librariesio/release/npm/iobroker.goodwePV?label=npm%20dependencies&style=flat-square)
+[![NPM version](https://img.shields.io/npm/v/iobroker.goodwe-pv.svg)](https://www.npmjs.com/package/iobroker.goodwe-pv)
+[![Downloads](https://img.shields.io/npm/dm/iobroker.goodwe-pv.svg)](https://www.npmjs.com/package/iobroker.goodwe-pv)
+![node-lts](https://img.shields.io/node/v-lts/iobroker.goodwe-pv?style=flat-square)
+![Libraries.io dependency status for latest release](https://img.shields.io/librariesio/release/npm/iobroker.goodwe-pv?label=npm%20dependencies&style=flat-square)
 
-![GitHub](https://img.shields.io/github/license/hombach/iobroker.goodwePV?style=flat-square)
-![GitHub repo size](https://img.shields.io/github/repo-size/hombach/iobroker.goodwePV?logo=github&style=flat-square)
-![GitHub commit activity](https://img.shields.io/github/commit-activity/m/hombach/iobroker.goodwePV?logo=github&style=flat-square)
-![GitHub last commit](https://img.shields.io/github/last-commit/hombach/iobroker.goodwePV?logo=github&style=flat-square)
-![GitHub issues](https://img.shields.io/github/issues/hombach/iobroker.goodwePV?logo=github&style=flat-square)
+![GitHub](https://img.shields.io/github/license/hombach/iobroker.goodwe-pv?style=flat-square)
+![GitHub repo size](https://img.shields.io/github/repo-size/hombach/iobroker.goodwe-pv?logo=github&style=flat-square)
+![GitHub commit activity](https://img.shields.io/github/commit-activity/m/hombach/iobroker.goodwe-pv?logo=github&style=flat-square)
+![GitHub last commit](https://img.shields.io/github/last-commit/hombach/iobroker.goodwe-pv?logo=github&style=flat-square)
+![GitHub issues](https://img.shields.io/github/issues/hombach/iobroker.goodwe-pv?logo=github&style=flat-square)
 
-![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/hombach/iobroker.goodwePV/test-and-release.yml?branch=master&logo=github&style=flat-square)
-[![CodeQL](https://github.com/hombach/ioBroker.goodwePV/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/hombach/ioBroker.goodwePV/actions/workflows/codeql-analysis.yml)
-[![Appveyor-CI](https://ci.appveyor.com/api/projects/status/github/hombach/ioBroker.goodwePV?branch=master&svg=true)](https://ci.appveyor.com/project/hombach/iobroker-goodwePV)
-[![SNYK Known Vulnerabilities](https://snyk.io/test/github/hombach/ioBroker.goodwePV/badge.svg)](https://snyk.io/test/github/hombach/ioBroker.goodwePV)
+![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/hombach/iobroker.goodwe-pv/test-and-release.yml?branch=master&logo=github&style=flat-square)
+[![CodeQL](https://github.com/hombach/iobroker.goodwe-pv/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/hombach/iobroker.goodwe-pv/actions/workflows/codeql-analysis.yml)
+[![Appveyor-CI](https://ci.appveyor.com/api/projects/status/github/hombach/iobroker.goodwe-pv?branch=master&svg=true)](https://ci.appveyor.com/project/hombach/iobroker-goodwePV)
+[![SNYK Known Vulnerabilities](https://snyk.io/test/github/hombach/iobroker.goodwe-pv/badge.svg)](https://snyk.io/test/github/hombach/iobroker.goodwe-pv)
 
 ## Versions
 
-![Beta](https://img.shields.io/npm/v/iobroker.goodwePV.svg?color=red&label=beta)
-![Stable](https://iobroker.live/badges/goodwePV-stable.svg)
-![Installed](https://iobroker.live/badges/goodwePV-installed.svg)
+![Beta](https://img.shields.io/npm/v/iobroker.goodwe-pv.svg?color=red&label=beta)
+![Stable](https://iobroker.live/badges/goodwe-pv-stable.svg)
+![Installed](https://iobroker.live/badges/goodwe-pv-installed.svg)
 
-[![NPM](https://nodei.co/npm/iobroker.goodwePV.png?downloads=true)](https://nodei.co/npm/iobroker.goodwePV/)
+[![NPM](https://nodei.co/npm/iobroker.goodwe-pv.png?downloads=true)](https://nodei.co/npm/iobroker.goodwe-pv/)
 
-## goodwePV adapter for ioBroker
+## goodwe-pv adapter for ioBroker
 
 Communication with GoodWe Inverter ET/EH/BH/BT Series
 
