@@ -1,4 +1,3 @@
-/* eslint-disable no-undef */
 "use strict";
 
 /*
@@ -18,7 +17,7 @@ class Goodwe extends utils.Adapter {
 	cycleCnt = 0;
 
 	/**
-	 * @param {Partial<utils.AdapterOptions>} [options={}]
+	 * @param {Partial<utils.AdapterOptions>} [options]
 	 */
 	constructor(options) {
 		super({
@@ -45,21 +44,21 @@ class Goodwe extends utils.Adapter {
 		// Reset the connection indicator during startup
 		this.setState("info.connection", false, true);
 
-		// @ts-ignore
 		this.inverter.Connect(this.config.ipAddr, 8899);
 
 		this.myTimer();
-		
+
 		// examples for the checkPassword/checkGroup functions
 		let result = await this.checkPasswordAsync("admin", "iobroker");
-		this.log.info("check user admin pw iobroker: " + result);
+		this.log.info(`check user admin pw iobroker: ${result}`);
 
 		result = await this.checkGroupAsync("admin", "admin");
-		this.log.info("check group user admin group admin: " + result);
+		this.log.info(`check group user admin group admin: ${result}`);
 	}
 
 	/**
 	 * Is called when adapter shuts down - callback has to be called under any circumstances!
+	 *
 	 * @param {() => void} callback
 	 */
 	onUnload(callback) {
@@ -67,13 +66,14 @@ class Goodwe extends utils.Adapter {
 			this.clearTimeout(tmr_timeout);
 
 			callback();
-		} catch (e) {
+		} catch {
 			callback();
 		}
 	}
 
 	/**
 	 * Is called if a subscribed state changes
+	 *
 	 * @param {string} id
 	 * @param {ioBroker.State | null | undefined} state
 	 */
@@ -93,7 +93,7 @@ class Goodwe extends utils.Adapter {
 			common: { name: "DeviceInfo" },
 			native: {},
 		});
-	
+
 		this.CreateObjectStateNumber("DeviceInfo", "ModbusProtocolVersion");
 		this.CreateObjectStateNumber("DeviceInfo", "RatedPower");
 		this.CreateObjectStateNumber("DeviceInfo", "AcOutputType");
@@ -114,7 +114,7 @@ class Goodwe extends utils.Adapter {
 			common: { name: "RunningData" },
 			native: {},
 		});
-	
+
 		this.CreateObjectsDcParameters("RunningData", "PV1");
 		this.CreateObjectsDcParameters("RunningData", "PV2");
 		this.CreateObjectsDcParameters("RunningData", "PV3");
@@ -170,14 +170,14 @@ class Goodwe extends utils.Adapter {
 		this.CreateObjectStateNumber("RunningData", "DiagStatusL");
 		this.CreateObjectStateNumber("RunningData", "TotalPowerPv");
 	}
-	
+
 	CreateObjectsExtComData() {
 		this.setObjectNotExistsAsync("ExtComData", {
 			type: "channel",
 			common: { name: "ExtComData" },
 			native: {},
 		});
-	
+
 		this.CreateObjectStateNumber("ExtComData", "Commode");
 		this.CreateObjectStateNumber("ExtComData", "Rssi");
 		this.CreateObjectStateNumber("ExtComData", "ManufacturerCode");
@@ -193,14 +193,14 @@ class Goodwe extends utils.Adapter {
 		this.CreateObjectStateNumber("ExtComData", "EnergyTotalSell");
 		this.CreateObjectStateNumber("ExtComData", "EnergyTotalBuy");
 	}
-	
+
 	CreateObjectsBmsInfo() {
 		this.setObjectNotExistsAsync("BMSInfo", {
 			type: "channel",
 			common: { name: "ExtComData" },
 			native: {},
 		});
-	
+
 		this.CreateObjectStateNumber("BMSInfo", "Status");
 		this.CreateObjectStateNumber("BMSInfo", "PackTemperature");
 		this.CreateObjectStateNumber("BMSInfo", "CurrentMaxCharge");
@@ -212,7 +212,7 @@ class Goodwe extends utils.Adapter {
 	}
 
 	CreateObjectStateNumber(Path, Name) {
-		this.setObjectNotExistsAsync(Path + "." + Name, {
+		this.setObjectNotExistsAsync(`${Path}.${Name}`, {
 			type: "state",
 			common: {
 				name: Name,
@@ -224,9 +224,9 @@ class Goodwe extends utils.Adapter {
 			native: {},
 		});
 	}
-	
+
 	CreateObjectStateString(Path, Name) {
-		this.setObjectNotExistsAsync(Path + "." + Name, {
+		this.setObjectNotExistsAsync(`${Path}.${Name}`, {
 			type: "state",
 			common: {
 				name: "Name",
@@ -240,13 +240,13 @@ class Goodwe extends utils.Adapter {
 	}
 
 	CreateObjectsDcParameters(Path, Name) {
-		this.setObjectNotExistsAsync(Path + "." + Name, {
+		this.setObjectNotExistsAsync(`${Path}.${Name}`, {
 			type: "channel",
 			common: { name: "Name" },
 			native: {},
 		});
-	
-		this.setObjectNotExistsAsync(Path + "." + Name + ".Voltage", {
+
+		this.setObjectNotExistsAsync(`${Path}.${Name}.Voltage`, {
 			type: "state",
 			common: {
 				name: "Voltage",
@@ -257,8 +257,8 @@ class Goodwe extends utils.Adapter {
 			},
 			native: {},
 		});
-	
-		this.setObjectNotExistsAsync(Path + "." + Name + ".Current", {
+
+		this.setObjectNotExistsAsync(`${Path}.${Name}.Current`, {
 			type: "state",
 			common: {
 				name: "Current",
@@ -269,8 +269,8 @@ class Goodwe extends utils.Adapter {
 			},
 			native: {},
 		});
-	
-		this.setObjectNotExistsAsync(Path + "." + Name + ".Power", {
+
+		this.setObjectNotExistsAsync(`${Path}.${Name}.Power`, {
 			type: "state",
 			common: {
 				name: "Power",
@@ -281,8 +281,8 @@ class Goodwe extends utils.Adapter {
 			},
 			native: {},
 		});
-	
-		this.setObjectNotExistsAsync(Path + "." + Name + ".Mode", {
+
+		this.setObjectNotExistsAsync(`${Path}.${Name}.Mode`, {
 			type: "state",
 			common: {
 				name: "Mode",
@@ -294,15 +294,15 @@ class Goodwe extends utils.Adapter {
 			native: {},
 		});
 	}
-	
+
 	CreateObjectsAcPhase(Path, Name) {
-		this.setObjectNotExistsAsync(Path + "." + Name, {
+		this.setObjectNotExistsAsync(`${Path}.${Name}`, {
 			type: "channel",
 			common: { name: "Name" },
 			native: {},
 		});
-	
-		this.setObjectNotExistsAsync(Path + "." + Name + ".Voltage", {
+
+		this.setObjectNotExistsAsync(`${Path}.${Name}.Voltage`, {
 			type: "state",
 			common: {
 				name: "Voltage",
@@ -313,8 +313,8 @@ class Goodwe extends utils.Adapter {
 			},
 			native: {},
 		});
-	
-		this.setObjectNotExistsAsync(Path + "." + Name + ".Current", {
+
+		this.setObjectNotExistsAsync(`${Path}.${Name}.Current`, {
 			type: "state",
 			common: {
 				name: "Current",
@@ -325,8 +325,8 @@ class Goodwe extends utils.Adapter {
 			},
 			native: {},
 		});
-	
-		this.setObjectNotExistsAsync(Path + "." + Name + ".Frequency", {
+
+		this.setObjectNotExistsAsync(`${Path}.${Name}.Frequency`, {
 			type: "state",
 			common: {
 				name: "Frequency",
@@ -337,8 +337,8 @@ class Goodwe extends utils.Adapter {
 			},
 			native: {},
 		});
-	
-		this.setObjectNotExistsAsync(Path + "." + Name + ".Power", {
+
+		this.setObjectNotExistsAsync(`${Path}.${Name}.Power`, {
 			type: "state",
 			common: {
 				name: "Power",
@@ -350,15 +350,15 @@ class Goodwe extends utils.Adapter {
 			native: {},
 		});
 	}
-	
+
 	CreateObjectsPhaseBackUp(Path, Name) {
-		this.setObjectNotExistsAsync(Path + "." + Name, {
+		this.setObjectNotExistsAsync(`${Path}.${Name}`, {
 			type: "channel",
 			common: { name: "Name" },
 			native: {},
 		});
-	
-		this.setObjectNotExistsAsync(Path + "." + Name + ".Voltage", {
+
+		this.setObjectNotExistsAsync(`${Path}.${Name}.Voltage`, {
 			type: "state",
 			common: {
 				name: "Voltage",
@@ -369,8 +369,8 @@ class Goodwe extends utils.Adapter {
 			},
 			native: {},
 		});
-	
-		this.setObjectNotExistsAsync(Path + "." + Name + ".Current", {
+
+		this.setObjectNotExistsAsync(`${Path}.${Name}.Current`, {
 			type: "state",
 			common: {
 				name: "Current",
@@ -381,8 +381,8 @@ class Goodwe extends utils.Adapter {
 			},
 			native: {},
 		});
-	
-		this.setObjectNotExistsAsync(Path + "." + Name + ".Frequency", {
+
+		this.setObjectNotExistsAsync(`${Path}.${Name}.Frequency`, {
 			type: "state",
 			common: {
 				name: "Frequency",
@@ -393,8 +393,8 @@ class Goodwe extends utils.Adapter {
 			},
 			native: {},
 		});
-	
-		this.setObjectNotExistsAsync(Path + "." + Name + ".Power", {
+
+		this.setObjectNotExistsAsync(`${Path}.${Name}.Power`, {
 			type: "state",
 			common: {
 				name: "Power",
@@ -405,8 +405,8 @@ class Goodwe extends utils.Adapter {
 			},
 			native: {},
 		});
-	
-		this.setObjectNotExistsAsync(Path + "." + Name + ".Mode", {
+
+		this.setObjectNotExistsAsync(`${Path}.${Name}.Mode`, {
 			type: "state",
 			common: {
 				name: "Mode",
@@ -418,15 +418,15 @@ class Goodwe extends utils.Adapter {
 			native: {},
 		});
 	}
-	
+
 	CreateObjectMeterPhase(Path, Name) {
-		this.setObjectNotExistsAsync(Path + "." + Name, {
+		this.setObjectNotExistsAsync(`${Path}.${Name}`, {
 			type: "channel",
 			common: { name: Name },
 			native: {},
 		});
-	
-		this.setObjectNotExistsAsync(Path + "." + Name + ".ActivePower", {
+
+		this.setObjectNotExistsAsync(`${Path}.${Name}.ActivePower`, {
 			type: "state",
 			common: {
 				name: "ActivePower",
@@ -437,8 +437,8 @@ class Goodwe extends utils.Adapter {
 			},
 			native: {},
 		});
-	
-		this.setObjectNotExistsAsync(Path + "." + Name + ".PowerFactor", {
+
+		this.setObjectNotExistsAsync(`${Path}.${Name}.PowerFactor`, {
 			type: "state",
 			common: {
 				name: "PowerFactor",
@@ -453,7 +453,7 @@ class Goodwe extends utils.Adapter {
 
 	UpdateDeviceInfo() {
 		this.inverter.ReadDeviceInfo();
-	
+
 		this.setStateAsync("DeviceInfo.ModbusProtocolVersion", this.inverter.DeviceInfo.ModbusProtocolVersion, true);
 		this.setStateAsync("DeviceInfo.RatedPower", this.inverter.DeviceInfo.RatedPower, true);
 		this.setStateAsync("DeviceInfo.AcOutputType", this.inverter.DeviceInfo.AcOutputType, true);
@@ -466,13 +466,13 @@ class Goodwe extends utils.Adapter {
 		this.setStateAsync("DeviceInfo.ARM_SVN_Version", this.inverter.DeviceInfo.ARM_SVN_Version, true);
 		this.setStateAsync("DeviceInfo.DSP_Int_FW_Version", this.inverter.DeviceInfo.DSP_IntFirmwareVersion, true);
 		this.setStateAsync("DeviceInfo.ARM_Int_FW_Version", this.inverter.DeviceInfo.ARM_IntFirmwareVersion, true);
-	
+
 		this.setStateAsync("info.connection", this.inverter.Status, true);
 	}
 
 	UpdateRunningData() {
 		this.inverter.ReadRunningData();
-	
+
 		this.setStateAsync("RunningData.PV1.Voltage", this.inverter.RunningData.Pv1.Voltage, true);
 		this.setStateAsync("RunningData.PV1.Current", this.inverter.RunningData.Pv1.Current, true);
 		this.setStateAsync("RunningData.PV1.Power", this.inverter.RunningData.Pv1.Power, true);
@@ -567,10 +567,10 @@ class Goodwe extends utils.Adapter {
 		this.setStateAsync("RunningData.DiagStatusL", this.inverter.RunningData.DiagStatusL, true);
 		this.setStateAsync("RunningData.TotalPowerPv", this.inverter.RunningData.TotalPowerPv, true);
 	}
-	
+
 	UpdateExtComData() {
 		this.inverter.ReadExtComData();
-	
+
 		this.setStateAsync("ExtComData.Commode", this.inverter.ExtComData.Commode, true);
 		this.setStateAsync("ExtComData.Rssi", this.inverter.ExtComData.Rssi, true);
 		this.setStateAsync("ExtComData.ManufacturerCode", this.inverter.ExtComData.ManufacturerCode, true);
@@ -589,10 +589,10 @@ class Goodwe extends utils.Adapter {
 		this.setStateAsync("ExtComData.EnergyTotalSell", this.inverter.ExtComData.EnergyTotalSell, true);
 		this.setStateAsync("ExtComData.EnergyTotalBuy", this.inverter.ExtComData.EnergyTotalBuy, true);
 	}
-	
+
 	UpdateBmsInfo() {
 		this.inverter.ReadBmsInfo();
-	
+
 		this.setStateAsync("BMSInfo.Status", this.inverter.BmsInfo.Status, true);
 		this.setStateAsync("BMSInfo.PackTemperature", this.inverter.BmsInfo.PackTemperature, true);
 		this.setStateAsync("BMSInfo.CurrentMaxCharge", this.inverter.BmsInfo.CurrentMaxCharge, true);
@@ -603,12 +603,11 @@ class Goodwe extends utils.Adapter {
 		this.setStateAsync("BMSInfo.BatteryStrings", this.inverter.BmsInfo.BatteryStrings, true);
 	}
 
-	myTimer() {	
+	myTimer() {
 		if (this.inverter.Status == false) {
 			this.cycleCnt = 0;
 			this.inverter.ReadIdInfo();
 		} else {
-		
 			switch (this.cycleCnt) {
 				case 1:
 					this.UpdateDeviceInfo();
@@ -628,11 +627,10 @@ class Goodwe extends utils.Adapter {
 					break;
 			}
 
-			// @ts-ignore
-			if(this.cycleCnt >= this.config.pollCycle) {
+			if (this.cycleCnt >= this.config.pollCycle) {
 				this.cycleCnt = 0;
 			}
-		
+
 			this.cycleCnt++;
 		}
 
@@ -643,9 +641,9 @@ class Goodwe extends utils.Adapter {
 if (require.main !== module) {
 	// Export the constructor in compact mode
 	/**
-	 * @param {Partial<utils.AdapterOptions>} [options={}]
+	 * @param {Partial<utils.AdapterOptions>} [options]
 	 */
-	module.exports = (options) => new Goodwe(options);
+	module.exports = options => new Goodwe(options);
 } else {
 	// otherwise start the instance directly
 	new Goodwe();
