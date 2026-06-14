@@ -4,7 +4,15 @@
       "Bash(grep -A 10 \"constructor\" /tmp/ioBroker.tibberlink/src/lib/tibberDataAPI.ts | head -15)",
       "Read(//tmp/ioBroker.tibberlink/src/lib/**)",
       "Bash(sed -n '35,85p' /tmp/ioBroker.tibberlink/src/main.ts)",
-      "Read(//tmp/ioBroker.tibberlink/src/**)"
+      "Read(//tmp/ioBroker.tibberlink/src/**)",
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "Bash(curl -s https://raw.githubusercontent.com/hombach/ioBroker.tibberlink/master/package.json)",
+      "WebFetch(domain:api.github.com)",
+      "Bash(mkdir -p \"c:/Users/c.hombach/.vscode/ioBroker.goodwe-pv/src/lib\")",
+      "Bash(npm install *)"
+    ],
+    "additionalDirectories": [
+      "c:\\Users\\c.hombach\\.vscode\\ioBroker.goodwe-pv\\src"
     ]
   }
 }
