@@ -47,6 +47,7 @@ This adapter is based on [ioBroker.goodwe](https://github.com/FossyTom/ioBroker.
 -->
 
 ### **WORK IN PROGRESS**
+- (ioBroker-Bot) Adapter requires admin >= 7.8.23 now.
 
 * (hombach) refactored to TypeScript
 
