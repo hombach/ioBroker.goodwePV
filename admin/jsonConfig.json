@@ -6,9 +6,11 @@
 			"newLine": true,
 			"type": "text",
 			"label": "Ip Addr.",
+			"xs": 12,
 			"sm": 12,
 			"md": 6,
 			"lg": 6,
+			"xl": 6,
 			"help": "IP Address of GoodWe Inverter"
 		},
 		"pollCycle": {
@@ -17,9 +19,11 @@
 			"min": 10,
 			"max": 3600,
 			"label": "Poll cycle",
+			"xs": 12,
 			"sm": 12,
 			"md": 6,
 			"lg": 6,
+			"xl": 6,
 			"help": "Poll cycle for data refreshment in seconds"
 		}
 	}
