@@ -33,6 +33,7 @@ Communication with GoodWe Inverter ET/EH/BH/BT Series
 ## Based on
 
 This adapter is based on [ioBroker.goodwe](https://github.com/FossyTom/ioBroker.goodwe) by [FossyTom](https://github.com/FossyTom) (Thomas Schönberger), licensed under MIT.
+Copyright (c) 2023 Thomas Schönberger <SchoenbergerThomas@freenet.de> (original ioBroker.goodwe)
 
 ## Configuration
 
@@ -47,19 +48,18 @@ This adapter is based on [ioBroker.goodwe](https://github.com/FossyTom/ioBroker.
 -->
 
 ### **WORK IN PROGRESS**
-- (ioBroker-Bot) Adapter requires admin >= 7.8.23 now.
 
-* (hombach) refactored to TypeScript
+- (ioBroker-Bot) Adapter requires admin >= 7.8.23 now.
+- (hombach) refactored to TypeScript
 
 ### 0.0.1 (2026-06-14)
 
-* (hombach) initial release based on ioBroker.goodwe by FossyTom
+- (hombach) initial release based on ioBroker.goodwe by FossyTom
 
 ## License
 MIT License
 
 Copyright (c) 2026 hombach <goodwePV@homba.ch>
-Copyright (c) 2023 Thomas Schönberger <SchoenbergerThomas@freenet.de> (original ioBroker.goodwe)
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
