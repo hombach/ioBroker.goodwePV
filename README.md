@@ -51,6 +51,7 @@ Copyright (c) 2023 Thomas Schönberger <SchoenbergerThomas@freenet.de> (original
 
 - (ioBroker-Bot) Adapter requires admin >= 7.8.23 now.
 - (hombach) refactored to TypeScript
+- (hombach) upgraded adapter-core
 - (hombach) fixed repoChecker warnings
 
 ### 0.0.1 (2026-06-14)
