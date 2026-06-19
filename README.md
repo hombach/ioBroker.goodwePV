@@ -28,6 +28,8 @@
 
 ## Sentry
 
+UNDER CONSTRUCTION: **This adapter uses Sentry libraries to automatically report exceptions and code errors to the developers.** For more details and for information on how to disable error reporting, see <a href="https://github.com/ioBroker/plugin-sentry#plugin-sentry">Sentry-Plugin Documentation</a>!
+
 ## goodwe-pv adapter for ioBroker
 
 Communication with GoodWe hybrid inverters of the ET, EH, BH and BT series via the local UDP interface (port 8899). No cloud connection required — the adapter talks directly to the inverter on your LAN.
@@ -49,7 +51,6 @@ All GoodWe hybrid inverters that expose the local Modbus-over-UDP interface on p
 
 > **Tip:** Find the inverter's IP address in your router's DHCP lease table, or check the GoodWe SEMS portal / ShinePhone app under "Device Info". Assigning a static IP or DHCP reservation is recommended so the address does not change.
 
-
 ## Based on
 
 This adapter is based on [ioBroker.goodwe](https://github.com/FossyTom/ioBroker.goodwe) by [FossyTom](https://github.com/FossyTom) (Thomas Schönberger), licensed under MIT.
@@ -57,7 +58,8 @@ Copyright (c) 2023 Thomas Schönberger <SchoenbergerThomas@freenet.de>
 
 ## Donate
 
-If this adapter is useful to you, a donation is always welcome:
+<a href="https://www.paypal.com/donate/?hosted_button_id=F7NM9R2E2DUYS"><img src="https://raw.githubusercontent.com/Hombach/ioBroker.tibberlink/master/docu/bluePayPal.svg" height="40"></a>  
+If you enjoyed this project — or just feeling generous, consider buying me a beer. Cheers! :beers:
 
 ## Changelog
 <!--
