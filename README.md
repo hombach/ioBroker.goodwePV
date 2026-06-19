@@ -66,8 +66,7 @@ If you enjoyed this project — or just feeling generous, consider buying me a b
 	Placeholder for the next version (at the beginning of the line):
 	### **WORK IN PROGRESS**
 -->
-
-### **WORK IN PROGRESS**
+### 0.1.0 (2026-06-19)
 
 - (ioBroker-Bot) Adapter requires admin >= 7.8.23 now.
 - (hombach) refactored to TypeScript

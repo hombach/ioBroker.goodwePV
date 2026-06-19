@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "goodwe-pv",
-    "version": "0.0.1",
+    "version": "0.1.0",
     "news": {
+      "0.1.0": {
+        "en": "Adapter requires admin >= 7.8.23 now.\nrefactored to TypeScript\nupgraded adapter-core\nadded units\nfixed repoChecker warnings",
+        "de": "Der Adapter benötigt jetzt Administratorrechte ab Version 7.8.23.\nUmstrukturierung zu TypeScript\naufgerüsteter Adapterkern\nhinzugefügte Einheiten\nrepoChecker-Warnungen behoben",
+        "ru": "Для работы адаптера теперь требуется версия admin >= 7.8.23.\nпереработан с использованием TypeScript.\nмодернизированный адаптер-ядро\nдобавленные единицы\nИсправлены предупреждения repoChecker",
+        "pt": "O adaptador agora requer o admin versão >= 7.8.23.\nRefatorado para TypeScript\nnúcleo do adaptador atualizado\nunidades adicionadas\nAvisos do repoChecker corrigidos",
+        "nl": "De adapter vereist nu admin >= 7.8.23.\ngeherstructureerd naar TypeScript\nverbeterde adapterkern\ntoegevoegde eenheden\nrepoChecker-waarschuwingen opgelost",
+        "fr": "L'adaptateur nécessite désormais une version d'administrateur supérieure ou égale à 7.8.23.\nrefactorisé en TypeScript\ncarte réseau améliorée\nunités ajoutées\nAvertissements de repoChecker corrigés",
+        "it": "L'adattatore ora richiede admin >= 7.8.23.\nrifattorizzato in TypeScript\nadattatore-core aggiornato\nunità aggiunte\nRisolti gli avvisi di repoChecker",
+        "es": "El adaptador ahora requiere admin >= 7.8.23.\nrefactorizado a TypeScript\nnúcleo del adaptador actualizado\nunidades añadidas\nSe corrigieron las advertencias de repoChecker.",
+        "pl": "Adapter wymaga teraz uprawnień administratora >= 7.8.23.\nprzebudowano na TypeScript\nulepszony rdzeń adaptera\ndodane jednostki\nnaprawiono ostrzeżenia repoChecker",
+        "uk": "Адаптер тепер вимагає адміністратора версії >= 7.8.23.\nперероблено на TypeScript\nоновлений адаптер-ядро\nдодані одиниці\nвиправлені попередження repoChecker",
+        "zh-cn": "适配器现在需要管理员版本 >= 7.8.23。\n重构为 TypeScript\n升级后的适配器核心\n新增单位\n修复了 repoChecker 警告"
+      },
       "0.0.1": {
         "en": "initial release",
         "de": "Erstveröffentlichung",
@@ -87,7 +100,7 @@
     ],
     "plugins": {
       "sentry": {
-  		"dsn": "https://51b755965e368c713f574e17296063f2@o415875.ingest.us.sentry.io/4511593856368640"
+        "dsn": "https://51b755965e368c713f574e17296063f2@o415875.ingest.us.sentry.io/4511593856368640"
       }
     }
   },

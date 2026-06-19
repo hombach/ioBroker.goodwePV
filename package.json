@@ -1,6 +1,6 @@
 {
   "name": "iobroker.goodwe-pv",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Communication with GoodWe Inverter ET/EH/BH/BT Series",
   "author": {
     "name": "hombach",
