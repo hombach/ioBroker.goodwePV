@@ -43,8 +43,9 @@ All GoodWe hybrid inverters that expose the local Modbus-over-UDP interface on p
 
 ## Configuration
 
-| **IP address** | Local IP address of the GoodWe inverter | `127.0.0.1` |
-| **Poll cycle** | How often (in seconds) each data group is re-read from the inverter. The four data groups (DeviceInfo, RunningData, ExtComData, BMSInfo) are staggered so only one UDP request is in flight per second. | `10` |
+**IP address** — Local IP address of the GoodWe inverter (default: `127.0.0.1`). Find it in your router's DHCP lease table or in the SEMS portal / ShinePhone app under "Device Info". A static IP or DHCP reservation is recommended.
+
+**Poll cycle** — How often in seconds each data group is re-read from the inverter (default: `10`). The four data groups (DeviceInfo, RunningData, ExtComData, BMSInfo) are staggered so only one UDP request is in flight per second.
 
 > **Tip:** Find the inverter's IP address in your router's DHCP lease table, or check the GoodWe SEMS portal / ShinePhone app under "Device Info". Assigning a static IP or DHCP reservation is recommended so the address does not change.
 
