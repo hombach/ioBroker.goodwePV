@@ -85,22 +85,11 @@
         "admin": ">=7.8.23"
       }
     ],
-
-// Import with `import * as Sentry from "@sentry/node"` if you are using ESM
-const Sentry = require("@sentry/node");
-
-Sentry.init({
-  dsn: "https://51b755965e368c713f574e17296063f2@o415875.ingest.us.sentry.io/4511593856368640",
-  dataCollection: {
-    // To disable sending user data and HTTP bodies, uncomment the lines below. For more info visit:
-    // https://docs.sentry.io/platforms/javascript/guides/node/configuration/options/#dataCollection
-    // userInfo: false,
-    // httpBodies: [],
-  },
-});
-
-
-    
+    "plugins": {
+      "sentry": {
+  		"dsn": "https://51b755965e368c713f574e17296063f2@o415875.ingest.us.sentry.io/4511593856368640"
+      }
+    }
   },
   "native": {
     "ipAddr": "127.0.0.1",
