@@ -135,7 +135,7 @@ class Goodwe extends utils.Adapter {
 			rd.BackUpL1.Frequency,
 			rd.BackUpL1.Power,
 			rd.BackUpL1.Mode,
-		);
+		); // Note: BackUpL1 is used as "grid backup" for three-phase inverters, so Mode is not relevant to track here (it only indicates backup status for single-phase inverters)
 		void this.projectUtils.updateAcPhaseBackup(
 			`RunningData`,
 			`BackUpL2`,
@@ -144,7 +144,7 @@ class Goodwe extends utils.Adapter {
 			rd.BackUpL2.Frequency,
 			rd.BackUpL2.Power,
 			rd.BackUpL2.Mode,
-		);
+		); // Note: BackUpL2 is used as "grid backup" for single-phase inverters, so Mode is relevant to track here (0 = normal, 1 = backup active, 2 = backup fault)
 		void this.projectUtils.updateAcPhaseBackup(
 			`RunningData`,
 			`BackUpL3`,
@@ -153,7 +153,7 @@ class Goodwe extends utils.Adapter {
 			rd.BackUpL3.Frequency,
 			rd.BackUpL3.Power,
 			rd.BackUpL3.Mode,
-		);
+		); // Note: BackUpL3 is used as "battery backup" for single-phase inverters, so Mode is relevant to track here (0 = normal, 1 = backup active, 2 = backup fault)
 		void this.projectUtils.checkAndSetValueNumber(`RunningData.PowerL1`, rd.PowerL1, `Power L1`, `W`);
 		void this.projectUtils.checkAndSetValueNumber(`RunningData.PowerL2`, rd.PowerL2, `Power L2`, `W`);
 		void this.projectUtils.checkAndSetValueNumber(`RunningData.PowerL3`, rd.PowerL3, `Power L3`, `W`);
@@ -198,31 +198,31 @@ class Goodwe extends utils.Adapter {
 		this.inverter.ReadExtComData();
 		const ec = this.inverter.ExtComData;
 		await this.projectUtils.checkAndSetChannel(`ExtComData`, `ExtComData`, `goodwe-pv.png`);
-		void this.projectUtils.checkAndSetValueNumber(`ExtComData.Commode`, ec.Commode);
-		void this.projectUtils.checkAndSetValueNumber(`ExtComData.Rssi`, ec.Rssi);
-		void this.projectUtils.checkAndSetValueNumber(`ExtComData.ManufacturerCode`, ec.ManufacturerCode);
-		void this.projectUtils.checkAndSetValueNumber(`ExtComData.MeterConnectStatus`, ec.MeterConnectStatus);
-		void this.projectUtils.checkAndSetValueNumber(`ExtComData.MeterCommunicateStatus`, ec.MeterCommunicateStatus);
+		void this.projectUtils.checkAndSetValueNumber(`ExtComData.Commode`, ec.Commode, `Communication Mode`);
+		void this.projectUtils.checkAndSetValueNumber(`ExtComData.Rssi`, ec.Rssi, `Signal Strength`);
+		void this.projectUtils.checkAndSetValueNumber(`ExtComData.ManufacturerCode`, ec.ManufacturerCode, `Manufacturer Code`);
+		void this.projectUtils.checkAndSetValueNumber(`ExtComData.MeterConnectStatus`, ec.MeterConnectStatus, `Meter Connect Status`);
+		void this.projectUtils.checkAndSetValueNumber(`ExtComData.MeterCommunicateStatus`, ec.MeterCommunicateStatus, `Meter Communicate Status`);
 		await this.projectUtils.updateMeterPhase(`ExtComData`, `L1`, ec.L1.ActivePower, ec.L1.PowerFactor);
 		await this.projectUtils.updateMeterPhase(`ExtComData`, `L2`, ec.L2.ActivePower, ec.L2.PowerFactor);
 		await this.projectUtils.updateMeterPhase(`ExtComData`, `L3`, ec.L3.ActivePower, ec.L3.PowerFactor);
-		void this.projectUtils.checkAndSetValueNumber(`ExtComData.TotalActivePower`, ec.TotalActivePower);
-		void this.projectUtils.checkAndSetValueNumber(`ExtComData.TotalReactivePower`, ec.TotalReactivePower);
-		void this.projectUtils.checkAndSetValueNumber(`ExtComData.PowerFactor`, ec.PowerFactor);
+		void this.projectUtils.checkAndSetValueNumber(`ExtComData.TotalActivePower`, ec.TotalActivePower, `Total Active Power`, `W`);
+		void this.projectUtils.checkAndSetValueNumber(`ExtComData.TotalReactivePower`, ec.TotalReactivePower, `Total Reactive Power`, `VAR`);
+		void this.projectUtils.checkAndSetValueNumber(`ExtComData.PowerFactor`, ec.PowerFactor, `Power Factor`);
 		void this.projectUtils.checkAndSetValueNumber(`ExtComData.Frequency`, ec.Frequency, `Frequency`, `Hz`);
-		void this.projectUtils.checkAndSetValueNumber(`ExtComData.EnergyTotalSell`, ec.EnergyTotalSell);
-		void this.projectUtils.checkAndSetValueNumber(`ExtComData.EnergyTotalBuy`, ec.EnergyTotalBuy);
+		void this.projectUtils.checkAndSetValueNumber(`ExtComData.EnergyTotalSell`, ec.EnergyTotalSell, `Energy Total Sold`, `kWh`);
+		void this.projectUtils.checkAndSetValueNumber(`ExtComData.EnergyTotalBuy`, ec.EnergyTotalBuy, `Energy Total Bought`, `kWh`);
 	}
 
 	private async updateBmsInfo(): Promise<void> {
 		this.inverter.ReadBmsInfo();
 		const bms = this.inverter.BmsInfo;
 		await this.projectUtils.checkAndSetChannel(`BMSInfo`, `BMSInfo`, `goodwe-pv.png`);
-		void this.projectUtils.checkAndSetValueNumber(`BMSInfo.Status`, bms.Status);
+		void this.projectUtils.checkAndSetValueNumber(`BMSInfo.Status`, bms.Status, `Status`);
 		void this.projectUtils.checkAndSetValueNumber(`BMSInfo.PackTemperature`, bms.PackTemperature, `Pack Temperature`, `°C`);
-		void this.projectUtils.checkAndSetValueNumber(`BMSInfo.CurrentMaxCharge`, bms.CurrentMaxCharge);
-		void this.projectUtils.checkAndSetValueNumber(`BMSInfo.CurrentMaxDischarge`, bms.CurrentMaxDischarge);
-		void this.projectUtils.checkAndSetValueNumber(`BMSInfo.ErrorCode`, bms.ErrorCode);
+		void this.projectUtils.checkAndSetValueNumber(`BMSInfo.CurrentMaxCharge`, bms.CurrentMaxCharge, `Current Max Charge`, `A`);
+		void this.projectUtils.checkAndSetValueNumber(`BMSInfo.CurrentMaxDischarge`, bms.CurrentMaxDischarge, `Current Max Discharge`, `A`);
+		void this.projectUtils.checkAndSetValueNumber(`BMSInfo.ErrorCode`, bms.ErrorCode, `Error Code`);
 		void this.projectUtils.checkAndSetValueNumber(`BMSInfo.SOC`, bms.SOC, `State of Charge`, `%`);
 		void this.projectUtils.checkAndSetValueNumber(`BMSInfo.SOH`, bms.SOH, `State of Health`, `%`);
 		void this.projectUtils.checkAndSetValueNumber(`BMSInfo.BatteryStrings`, bms.BatteryStrings);
