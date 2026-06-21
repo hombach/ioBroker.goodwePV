@@ -99,8 +99,8 @@ class Goodwe extends utils.Adapter {
 		void this.projectUtils.checkAndSetValueNumber(`DeviceInfo.ModbusProtocolVersion`, di.ModbusProtocolVersion);
 		void this.projectUtils.checkAndSetValueNumber(`DeviceInfo.RatedPower`, di.RatedPower, `Rated Power`, `W`);
 		void this.projectUtils.checkAndSetValueNumber(`DeviceInfo.AcOutputType`, di.AcOutputType);
-		void this.projectUtils.checkAndSetValue(`DeviceInfo.SerialNumber`, di.SerialNumber);
-		void this.projectUtils.checkAndSetValue(`DeviceInfo.DeviceType`, di.DeviceType);
+		void this.projectUtils.checkAndSetValue(`DeviceInfo.SerialNumber`, di.SerialNumber, `Serial Number`);
+		void this.projectUtils.checkAndSetValue(`DeviceInfo.DeviceType`, di.DeviceType, `Device Type`);
 		void this.projectUtils.checkAndSetValueNumber(`DeviceInfo.DSP1_SW_Version`, di.DSP1_SoftwareVersion);
 		void this.projectUtils.checkAndSetValueNumber(`DeviceInfo.DSP2_SW_Version`, di.DSP2_SoftwareVersion);
 		void this.projectUtils.checkAndSetValueNumber(`DeviceInfo.DSP_SVN_Version`, di.DSP_SVN_Version);
@@ -122,11 +122,11 @@ class Goodwe extends utils.Adapter {
 		await this.projectUtils.updateAcPhase(`RunningData`, `GridL1`, rd.GridL1.Voltage, rd.GridL1.Current, rd.GridL1.Frequency, rd.GridL1.Power);
 		await this.projectUtils.updateAcPhase(`RunningData`, `GridL2`, rd.GridL2.Voltage, rd.GridL2.Current, rd.GridL2.Frequency, rd.GridL2.Power);
 		await this.projectUtils.updateAcPhase(`RunningData`, `GridL3`, rd.GridL3.Voltage, rd.GridL3.Current, rd.GridL3.Frequency, rd.GridL3.Power);
-		void this.projectUtils.checkAndSetValueNumber(`RunningData.GridMode`, rd.GridMode);
-		void this.projectUtils.checkAndSetValueNumber(`RunningData.InverterTotalPower`, rd.InverterTotalPower);
-		void this.projectUtils.checkAndSetValueNumber(`RunningData.AcActivePower`, rd.AcActivePower);
-		void this.projectUtils.checkAndSetValueNumber(`RunningData.AcReactivePower`, rd.AcReactivePower);
-		void this.projectUtils.checkAndSetValueNumber(`RunningData.AcApparentPower`, rd.AcApparentPower);
+		void this.projectUtils.checkAndSetValueNumber(`RunningData.GridMode`, rd.GridMode, `Grid Mode`);
+		void this.projectUtils.checkAndSetValueNumber(`RunningData.InverterTotalPower`, rd.InverterTotalPower, `Inverter Total Power`, `W`);
+		void this.projectUtils.checkAndSetValueNumber(`RunningData.AcActivePower`, rd.AcActivePower, `AC Active Power`, `W`);
+		void this.projectUtils.checkAndSetValueNumber(`RunningData.AcReactivePower`, rd.AcReactivePower, `AC Reactive Power`, `VAR`);
+		void this.projectUtils.checkAndSetValueNumber(`RunningData.AcApparentPower`, rd.AcApparentPower, `AC Apparent Power`, `VA`);
 		void this.projectUtils.updateAcPhaseBackup(
 			`RunningData`,
 			`BackUpL1`,
